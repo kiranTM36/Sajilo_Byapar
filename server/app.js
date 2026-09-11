@@ -8,6 +8,8 @@ const app = express()
 //Import Routes
 const adminRoute = require('./routes/adminRoute') 
 const categoryRoute = require('./routes/categoryRoute')
+const customerRoute = require('./routes/customerRoute')
+const productRoute = require('./routes/productRoute')
 
 app.use(cors({
     origin  : "*",
@@ -20,6 +22,8 @@ app.use(express.json())
 
 app.use('/admin', adminRoute)
 app.use('/category' , categoryRoute)
+app.use('/customer' , customerRoute)
+app.use('/product' , productRoute)
 
 app.listen(9000 , () => {
     console.log("App started")

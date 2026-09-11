@@ -19,6 +19,45 @@ const addAdmin = async (req , res) => {
     }
 }
 
+const adminLogin = async(req , res) => {
+    try {
+        const data = req.body
+
+        const admin = await adminModel.findOne({email : data.email})
+
+        if(!admin){
+            return res.status(404).json({
+                message : "Invalid Phone Number"
+            })
+        }
+
+        const isMatch = await bcrypt(data.password , admin.password)
+
+        if(!isMatch){
+            return res.status(404).json({
+                message : "Invalid Password"
+            })
+        }
+
+        const token = jwt.sign({id : admin._id , email : admin.email} , 'sajiloBcrypt', {
+            expiredIn : '30d'
+        })
+
+        console.log('token')
+
+        res.status(200).json({
+            message : "Login Successful",
+            token : token , 
+        })
+        
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message : "Server Error"
+        })
+    }
+}
+
 const deleteAdmin = async (req , res) => {
     try {
         const {id} = req.params

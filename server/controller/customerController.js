@@ -52,7 +52,10 @@ const customerLogin = async(req , res) => {
         })
         
     } catch (error) {
-        
+        console.log(error)
+        res.status(500).json({
+            message : "Server Error"
+        })
     }
 }
 
@@ -148,4 +151,4 @@ const editCustomer = async (req , res) => {
     }
 }
 
-module.exports = { addCustomer , getCustomer , getSingleCustomer , deleteCustomer , editCustomer }
+module.exports = { addCustomer , getCustomer , getSingleCustomer , deleteCustomer , editCustomer , customerLogin}

@@ -14,7 +14,6 @@ const productRoute = require('./routes/productRoute')
 app.use(cors({
     origin  : "*",
     credentials : true , 
-    methods : ["GET", "POST" , "PUT" , "DELETE"]
 }))
 
 app.use(express.urlencoded({ extended : true }))

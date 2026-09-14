@@ -1,7 +1,7 @@
 const { addCategory , getCategory , deletecategory , updateCategory} = require('../controller/categoryController')
 const router = require('express').Router()
 
-router.post('/add/category' , addCategory)
+router.post('/add' , addCategory)
 
 router.get('/get/all' , getCategory)
 

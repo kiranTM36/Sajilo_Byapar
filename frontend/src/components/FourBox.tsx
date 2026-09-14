@@ -7,8 +7,8 @@ const FourBox = () => {
         <div className='px-5 flex justify-between items-center h-[10vh]'>
 
           <div>
-            <h1>Good Morining</h1>
-            <p>Here is Your activities</p>
+            <h1 className='text-xl font-bold text-gray-800'>Good Morining</h1>
+            <p className='text-sm text-gray-500'>Here is Your activities</p>
           </div>
 
           <div className='flex justify-center items-center gap-2 relative'>

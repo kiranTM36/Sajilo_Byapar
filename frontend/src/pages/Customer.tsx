@@ -1,15 +1,22 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
-import { getCustomers } from '../store/customerSlice'
+import { getAllCustomer } from '../store/userSlice'
+import CustomerForm, { type customerData } from '../auth/CustomerForm'
 
 const Customer = () => {
 
+    const [showForm , setShowForm] = useState(false)
+
+    const handleAddCustomer=async (data : customerData) => {
+
+    }
+
     const dispatch = useDispatch<AppDispatch>()
-    const { customers , status } = useSelector((state:RootState) => state.customer)
+    const { customers , status } = useSelector((state:RootState) => state.user)
 
     useEffect(() => {
-        dispatch(getCustomers())
+        dispatch(getAllCustomer())
     } , [dispatch])
 
     console.log(status , customers)
@@ -26,8 +33,23 @@ const Customer = () => {
 
             <div className='flex justify-center items-center gap-2 relative'>
               <button className='py-1 px-3 bg-white shadow  rounded-md '>Calender</button>
-              <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D]'>New Sales</button>
+              <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D] flex gap-1 cursor-pointer justify-center items-center hover:scale-105 duration-200'
+                onClick={()=> setShowForm(true)}
+              ><i className="fa-solid fa-plus text-md"></i>Add Customer</button>
             </div>
+
+            {
+              showForm && (
+                <div className='h-screen fixed left-0 top-0 z-10 w-screen flex justify-center items-center backdrop-blur-2xl'>
+                    <div className='relative'>
+                      <button className='absolute top-[-1vh] right-[-1vh] h-[3vh] w-[3vh] text-center text-white bg-red-600 rounded-full text-sm hover:scale-105 cursor-pointer'
+                        onClick={()=>setShowForm(false)}
+                      ><i className="fa-solid fa-x"></i></button>
+                      <CustomerForm name='Add' onEvent={handleAddCustomer}  />
+                    </div>
+                </div>
+              )
+            }
 
           </div>
           <div>
@@ -51,7 +73,8 @@ const Customer = () => {
 
           <select name="" id="" className='w-[15%] border border-gray-200 p-1'>
             <option value="">Category</option>
-            <option value="">Noodles</option>
+            <option value="">Credit</option>
+            <option value="">Paid</option>
           </select>
         </div>
         <div className='h-[68vh] w-full border border-gray-200 rounded-md bg-white'>
@@ -70,23 +93,22 @@ const Customer = () => {
 
               <tbody className='w-full text-sm'>
                 {
-                    customers?.map((customer) => (
-                        <tr className='' key={customer._id}>
-                                        <td className='px-5 py-4 text-gray-600'>
-                                            <span className='text-gray-800 font-semibold'>{customer.customerName}</span>
-                                        </td>
-                                        <td className='px-5 py-4 text-gray-600'>Noodles</td>
-                                        <td className='px-5 py-4 text-gray-600'>6</td>
-                                        <td className='px-5 py-4 text-gray-600'>
-                                            Rs 120
-                                        </td>
-                                        <td className='px-5 py-4 text-gray-600'>
-                                            <span className='px-2.5 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 mr-2'>Edit</span>
-                                            <span className='px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700'>Delete</span>
-                                        </td>
-                        </tr>
-                    ))
+                  customers?.map((customer) => (
+                    <tr key={customer.id} className='w-full text-center text-gray-500 border border-gray-200 hover:bg-gray-50'>
+                  <td className='py-4 px-5 font-medium w-[10%]'>{customer.userName}</td>
+                  <td className='py-4 px-5 font-medium'>{customer.phoneNo}</td>
+                  <td className='py-4 px-5 font-medium'>Rs 20</td>
+                  <td className='py-4 px-5 font-normal'>{customer.role}</td>
+                  <td className='py-4 px-5 font-medium'>Jan 1</td>
+                  <td>
+                    <button className='px-2.5 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 mr-1'>Edit</button>
+                    <button className='px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700'>Delete</button>
+                  </td>
+                </tr>
+                  ))
                 }
+
+                
 
               </tbody>
             </table>

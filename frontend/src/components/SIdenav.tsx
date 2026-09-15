@@ -4,13 +4,13 @@ const SIdenav = () => {
   return (
     <div className="h-full bg-white shadow flex justify-start items-center py-2 flex-col gap-1">
 
-        <NavLink to='/' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>DashBoard</NavLink> 
+        <NavLink to='/' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-display"></i>DashBoard</NavLink> 
         <NavLink to='/sales' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>Sales</NavLink> 
-        <NavLink to='/customers' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>Customers</NavLink> 
-        <NavLink to='/products' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>Products</NavLink> 
+        <NavLink to='/customers' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-users"></i>Customers</NavLink> 
+        <NavLink to='/products' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-box"></i>Products</NavLink> 
         <NavLink to='/inventory' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>Inventory</NavLink> 
-        <NavLink to='/credit' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>Credit</NavLink> 
-        <NavLink to='/report' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>Report</NavLink> 
+        <NavLink to='/credit' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-book-open"></i>Credit</NavLink> 
+        <NavLink to='/report' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-chart-area"></i>Report</NavLink> 
 
     </div>
   )

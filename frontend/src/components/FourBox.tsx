@@ -12,7 +12,7 @@ const FourBox = () => {
           </div>
 
           <div className='flex justify-center items-center gap-2 relative'>
-            <button className='py-1 px-3 bg-white shadow  rounded-md '>Calender</button>
+            <button className='py-1 px-3 bg-white shadow  rounded-md '>{new Date().toDateString()}</button>
             <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D]'>New Sales</button>
           </div>
 

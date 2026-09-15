@@ -9,7 +9,7 @@ import { getCategory } from '../store/categorySlice'
 //   categoryName : string
 // }
 
-const Products = () => {
+const Credit = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -44,10 +44,8 @@ const Products = () => {
           <div>
 
             <div className='flex justify-center items-center gap-5 px-5'>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
+              <div className='h-[20vh] w-1/2 bg-white shadow border border-gray-200 rounded-xl'></div>
+              <div className='h-[20vh] w-1/2 bg-white shadow border border-gray-200 rounded-xl'></div>
             </div>
           </div>
         </div>
@@ -62,11 +60,8 @@ const Products = () => {
 
           <select name="" id="" className='w-[15%] border border-gray-200 p-1'>
             <option value="">Category</option>
-            {
-              category.map((item)=> (
-                <option value={`${item.id}`} key={`${item.id}`}>{item.categoryName}</option>
-              ))
-            }
+            <option value="">Paid</option>
+            <option value="">Credit</option>
           </select>
         </div>
         <div className='h-[68vh] w-full border border-gray-200 rounded-md bg-white'>
@@ -74,18 +69,24 @@ const Products = () => {
             <table className='w-full text-sm'>
               <thead className='text-gray-50 border-b border-gray-200 sticky top-0'>
                 <tr className='text-center text-gray-500 bg-[#EEF4FF]'>
-                  <th className='px-5 py-2 font-medium w-[5%]'>Image</th>
-                  <th className='px-5 py-2 font-medium'>Product</th>
-                  <th className='px-5 py-2 font-medium'>Category</th>
-                  <th className='px-5 py-2 font-medium'>Price</th>
-                  <th className='px-5 py-2 font-medium'>Stock</th>
-                  <th className='px-5 py-2 font-medium'>Action</th>
+                  <th className='px-5 py-2 font-medium w-[15%]'>Customer</th>
+                  <th className='px-5 py-2 font-medium'>Phone</th>
+                  <th className='px-5 py-2 font-medium'>Total Credit</th>
+                  <th className='px-5 py-2 font-medium'>Paid</th>
+                  <th className='px-5 py-2 font-medium'>Remaining</th>
+                  <th className='px-5 py-2 font-medium'>Last Payement</th>
                 </tr>
               </thead>
 
               <tbody className='w-full text-sm'>
-                
-
+                <tr className='text-center text-gray-500 hover:bg-gray-50 border border-gray-200'>
+                  <th className='px-5 py-4 font-medium w-[15%] text-gray-800'>Kiran Magar</th>
+                  <th className='px-5 py-4 font-medium text-gray-600'>9827364010</th>
+                  <th className='px-5 py-4 font-medium text-gray-600'>Rs. 900</th>
+                  <th className='px-5 py-4 font-medium text-gray-600'>Rs. 700</th>
+                  <th className='px-5 py-4 font-medium text-gray-600'>Rs. 200</th>
+                  <th className='px-5 py-4 font-medium text-gray-600'>Yesterday</th>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -95,4 +96,4 @@ const Products = () => {
   )
 }
 
-export default Products
+export default Credit

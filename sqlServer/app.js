@@ -1,29 +1,37 @@
 const express = require('express')
 require('./db')
+const cors = require('cors')
 
-const customerModule = require('./modules/customerModules')
+const userModule = require('./modules/userModule')
 const productModule = require('./modules/productModule')
 const categoryModule = require('./modules/categoryModule')
-const adminModule = require('./modules/adminModule')
 const creditModule = require('./modules/creditModule')
 const salesModule = require('./modules/salesModule')
 const salesDetailsModule = require('./modules/salesDetailsModule')
 const inventoryModule = require('./modules/inventoryModule')
 
-customerModule()
-productModule()
-adminModule()
+userModule()
 categoryModule()
-creditModule()
+productModule()
 salesModule()
 salesDetailsModule()
+creditModule()
 inventoryModule()
 
-const customerRoute = require('./router/customerRoute')
+const userRoute = require('./router/userRoute')
+const categoryRoute = require('./router/categoryRoute')
 
 const app = express()
 
-app.use('/customer' , customerRoute)
+app.use(express.urlencoded({extended : true}))
+app.use(express.json())
+
+app.use(cors({
+    origin : "*"
+}))
+
+app.use('/user' , userRoute)
+app.use('/category' , categoryRoute)
 
 
 app.listen(8000, () => {

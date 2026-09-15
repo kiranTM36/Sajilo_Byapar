@@ -1,5 +1,3 @@
-import logo from '../assets/logo.jpg'
-
 const Navbar = () => {
     return (
         <div className='h-[7vh] w-full bg-white fixed z-10 shadow top-0 left-0 flex justify-between items-center'>

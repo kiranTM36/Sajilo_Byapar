@@ -2,13 +2,27 @@
 
 /* p-2 bg-white w-2/3 rounded-md */
 
+*{
+     font-family: "Playfair Display", serif;
+}
+
 .SidenavButton{
     padding :6px 8px ;
     width: 80%;
     border-radius: 4px;
+    display: flex;
+    justify-content: start;
+    gap: 10px;
+    align-items: center;
 }
 
 .sidenavAvtive{
     background-color: #00855D;
     color: white;
+}
+
+.popOver-Hover{
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    scale: 1.1;
+    transition: all ease-in 0.3s;
 }

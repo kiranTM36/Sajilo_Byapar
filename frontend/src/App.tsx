@@ -4,6 +4,8 @@ import Dashboard from './pages/Dashboard'
 import Sales from './pages/Sales'
 import Products from './pages/Products'
 import Customer from './pages/Customer'
+import Credit from './pages/Credit'
+import CustomerEdit from './auth/CustomerEdit'
 
 const App = () => {
   return (
@@ -16,7 +18,10 @@ const App = () => {
           <Route path='/sales' element={<Sales />} />
           <Route path='/products' element={<Products />} />
           <Route path='/customers' element={<Customer />} />
+          <Route path='/credit' element={<Credit />} />
         </Route>
+
+        <Route path='/customer/edit' element={<CustomerEdit />} />
 
       </Routes>
 

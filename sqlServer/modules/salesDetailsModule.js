@@ -17,7 +17,7 @@ const createSalesDetailsTable = () => {
 
     db.query(sql , err => {
         if(err){
-            console.log('FAILED TO CREATE SALES DETAILS TABLE');
+            console.log('FAILED TO CREATE SALES DETAILS TABLE' , err);
             return            
         }
         console.log('SALES DETAILS TABLE CREATED SUCCESSFULLY');

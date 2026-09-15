@@ -11,7 +11,7 @@ const createSalesTable = () => {
             paymentStatus ENUM('PAID', 'PARTIAL', 'CREDIT') DEFAULT 'PAID',
             saleDate DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-            FOREIGN KEY (customerId) REFERENCES customer(id)
+            FOREIGN KEY (customerId) REFERENCES user(id)
         )
     `;
 

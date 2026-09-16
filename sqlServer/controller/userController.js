@@ -1,4 +1,6 @@
 const db = require('../db');
+const jwt = require('jsonwebtoken')
+
 
 const createUser = (req, res) => {
     try {
@@ -188,5 +190,69 @@ const getAllCustomer = (req, res) => {
     }
 };
 
+const userLogin = (req, res) => {
+    try {
+        const { phoneNo, password } = req.body
 
-module.exports = { createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer };
+        if (!phoneNo || !password) {
+            return res.status(400).json({
+                message: "Please Enter phoneNo or Password"
+            })
+        }
+
+        const sql = `
+            SELECT * FROM user WHERE phoneNo = ?
+        `
+
+        db.query(sql, [phoneNo], (err, result) => {
+
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: "Server Error"
+                })
+            }
+
+            if (result.length === 0) {
+                return res.status(404).json({
+                    message: "Phone Number not Registered"
+                })
+            }
+
+            const user = result[0]
+
+            if (password !== user.password) {
+                return res.status(400).json({
+                    message: "Invalid User"
+                })
+            }
+
+            const token = jwt.sign(
+                {
+                    id: user.id, phoneNo: user.phoneNo, role: user.role }, "sajiloEncrypt",{
+                    expiresIn: "30d"
+                }
+            )
+
+            res.cookie("token", token, {
+                    httpOnly: true,
+                    secure: false,
+                    maxAge: 60 * 60 * 60
+                })
+
+            return res.status(200).json({
+                message: "Login Successful",
+                token : token
+            })
+        })
+
+    } catch (error) {
+        console.log(error)
+
+        return res.status(500).json({
+            message: "Server Error"
+        })
+    }
+}
+
+module.exports = { createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer , userLogin};

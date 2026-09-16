@@ -21,6 +21,7 @@ const Products = () => {
     dispatch(getCategory())
   } , [dispatch])
   
+  
   console.log(category)
 
   console.log(category , status)

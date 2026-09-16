@@ -1,6 +1,7 @@
 const express = require('express')
 require('./db')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 const userModule = require('./modules/userModule')
 const productModule = require('./modules/productModule')
@@ -26,9 +27,14 @@ const app = express()
 app.use(express.urlencoded({extended : true}))
 app.use(express.json())
 
+app.use(cookieParser())
+
 app.use(cors({
-    origin : "*"
+    origin : "http://localhost:5173",
+    credentials : true
 }))
+
+app.use('/uploads', express.static('uploads'))
 
 app.use('/user' , userRoute)
 app.use('/category' , categoryRoute)

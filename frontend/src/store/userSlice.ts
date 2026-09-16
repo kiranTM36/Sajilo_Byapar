@@ -10,6 +10,12 @@ interface customerData {
     role: string
 }
 
+interface createCustomer {
+    userName: string
+    phoneNo: string
+    password : string
+}
+
 interface userData {
     id : number
     userName : string
@@ -75,15 +81,16 @@ export function getusers(){
     }
 }
 
-export function signUp(data : userData ){
+export function signUp(data : createCustomer ){
     return async function signUpThunk(dispatch:any) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.post("",data)
+            const response = await axios.post(`${config}user/add`,data)
 
-            if(response.status === 200 ){
+            if(response.status >= 200 || response.status < 300 ){
                 dispatch(setStatus(STATUSES.SUCCESS))
+                return true
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
@@ -91,16 +98,22 @@ export function signUp(data : userData ){
     }
 }
 
-export function login(data : userData ){
+export function login(data : createCustomer ){
     return async function loginThunk(dispatch:any) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.post("",data)
+            const response = await axios.post(`${config}user/login`,data , {
+                withCredentials : true
+            })
 
             if(response.status === 200 ){
                 dispatch(setToken(response.data.token))
                 dispatch(setStatus(STATUSES.SUCCESS))
+                localStorage.setItem('User', JSON.stringify(data))
+                localStorage.setItem('token' , response.data.token)
+
+                return true
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
@@ -114,8 +127,6 @@ export function getAllCustomer() {
 
         try {
             const response = await axios.get(`${config}user/all/customer`)
-
-            console.log("API RESPONSE:", response.data)
 
             if (response.status === 200 || response.status=== 201) {
                 dispatch(setCustomer(response.data.customers))

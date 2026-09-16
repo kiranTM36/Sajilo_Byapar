@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
-import { getAllCustomer } from '../store/userSlice'
+import { getAllCustomer, signUp } from '../store/userSlice'
 import CustomerForm, { type customerData } from '../auth/CustomerForm'
+import { Link } from 'react-router-dom'
 
 const Customer = () => {
 
     const [showForm , setShowForm] = useState(false)
+     const dispatch = useDispatch<AppDispatch>()
 
     const handleAddCustomer=async (data : customerData) => {
-
+      const success = await dispatch(signUp(data))
+      if(success){
+        alert("Addded")
+      }
     }
 
-    const dispatch = useDispatch<AppDispatch>()
     const { customers , status } = useSelector((state:RootState) => state.user)
 
     useEffect(() => {
@@ -42,7 +46,7 @@ const Customer = () => {
               showForm && (
                 <div className='h-screen fixed left-0 top-0 z-10 w-screen flex justify-center items-center backdrop-blur-2xl'>
                     <div className='relative'>
-                      <button className='absolute top-[-1vh] right-[-1vh] h-[3vh] w-[3vh] text-center text-white bg-red-600 rounded-full text-sm hover:scale-105 cursor-pointer'
+                      <button className='absolute top-[14vh] right-[35vw] h-[3vh] w-[3vh] text-center text-white bg-red-600 rounded-full text-sm hover:scale-105 cursor-pointer'
                         onClick={()=>setShowForm(false)}
                       ><i className="fa-solid fa-x"></i></button>
                       <CustomerForm name='Add' onEvent={handleAddCustomer}  />
@@ -82,7 +86,7 @@ const Customer = () => {
             <table className='w-full text-sm'>
               <thead className='text-gray-50 border-b border-gray-200 sticky top-0'>
                 <tr className='text-center text-gray-500 bg-[#EEF4FF]'>
-                  <th className='px-5 py-2 font-medium w-[5%]'>CUSTOMER</th>
+                  <th className='px-5 py-2 font-medium w-[15%]'>CUSTOMER</th>
                   <th className='px-5 py-2 font-medium'>PHONE</th>
                   <th className='px-5 py-2 font-medium'>TOTAL PURCHASE</th>
                   <th className='px-5 py-2 font-medium'>OUTSTANDING CREDIT</th>
@@ -95,13 +99,13 @@ const Customer = () => {
                 {
                   customers?.map((customer) => (
                     <tr key={customer.id} className='w-full text-center text-gray-500 border border-gray-200 hover:bg-gray-50'>
-                  <td className='py-4 px-5 font-medium w-[10%]'>{customer.userName}</td>
+                  <td className='py-4 px-5 font-medium w-[15%]'>{customer.userName}</td>
                   <td className='py-4 px-5 font-medium'>{customer.phoneNo}</td>
                   <td className='py-4 px-5 font-medium'>Rs 20</td>
                   <td className='py-4 px-5 font-normal'>{customer.role}</td>
                   <td className='py-4 px-5 font-medium'>Jan 1</td>
                   <td>
-                    <button className='px-2.5 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 mr-1'>Edit</button>
+                    <Link to="/customer/edit"><button className='px-2.5 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 mr-1'>Edit</button></Link>
                     <button className='px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700'>Delete</button>
                   </td>
                 </tr>

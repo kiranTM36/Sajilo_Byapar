@@ -67,4 +67,42 @@ const getAllCategory = (req , res) => {
     }
 }
 
-module.exports = { createCategory , getAllCategory }
+const deleteCategory = (req , res) => {
+    try {
+        const {id} = req.params
+
+        const sql = `
+            DELETE FROM category WHERE id=?
+        `
+        db.query(sql,[id] , (err , result) => {
+            if(err){
+                return res.status(401).json({
+                    success : false ,
+                    message : "Failed to delete Category"
+                })
+            }
+            if(result.affectedRows === 0){
+                return res.status(404).json({
+                    success : false,
+                    message : "Category Not Deleted",
+                })
+            }
+
+            res.status(200).json({
+                success : true ,
+                message : "Category Deleted Successfully",
+                result
+            })
+        })
+
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+}
+
+module.exports = { createCategory , getAllCategory , deleteCategory }

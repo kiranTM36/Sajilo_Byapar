@@ -1,17 +1,14 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { STATUSES } from '../status/STATUSES'
-
-interface categoryData {
-    _id: string,
-    categoryName: string
-}
+import config from '../config/config'
 
 interface productData {
-    _id: string,
-    productName : string
-    markedPrice: number,
-    category: categoryData,
+    id: number,
+    productName : string,
+    categoryId: number
+    categoryName: string
+    price : number,
     image: string,
     description: string
 }
@@ -59,7 +56,7 @@ export function getProducts() {
     return async function getProductThunk(dispatch: any) {
         dispatch(setStatus(STATUSES.LOADING))
         try {
-            const response = await axios.get('http://localhost:9000/product/all')
+            const response = await axios.get(`${config}product/get`)
             if (response.status === 201 || response.status === 200) {
                 dispatch(setProducts(response.data.products))
                 dispatch(setStatus(STATUSES.SUCCESS))
@@ -70,11 +67,11 @@ export function getProducts() {
     }
 }
 
-export function getSingleProducts( _id : string) {
+export function getSingleProducts( id : number) {
     return async function getSingleProductsThunk(dispatch: any) {
         dispatch(setStatus(STATUSES.LOADING))
         try {
-            const response = await axios.get('')
+            const response = await axios.get(`${config}product/get/${id}`)
             if (response.status === 201 || response.status === 200) {
                 dispatch(setSingleProduct(response.data.product))
                 dispatch(setStatus(STATUSES.SUCCESS))

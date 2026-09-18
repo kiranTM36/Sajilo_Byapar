@@ -18,7 +18,7 @@ const createUser = (req, res) => {
             data.email
         ];
 
-        db.query(sql, values, (err, result) => {
+        db.query(sql, values , (err, result) => {
             if (err) {
                 console.log("FAILED TO INSERT DATA", err);
                 return res.status(500).json({ 
@@ -100,7 +100,7 @@ const getSingleUser = (req, res) => {
                 return res.status(200).json({
                     success: true,
                     message: "Customer found",
-                    data: result[0]
+                    user: result[0]
                 });
             }
         });
@@ -116,7 +116,7 @@ const deleteUser = (req, res) => {
     try {
         const { id } = req.params;
 
-        const sql = `DELETE FROM customer WHERE id = ?`;
+        const sql = `DELETE FROM user WHERE id = ?`;
 
         db.query(sql, [id], (err, result) => {
             if (err) {
@@ -150,7 +150,7 @@ const deleteUser = (req, res) => {
 const getAllCustomer = (req, res) => {
     try {
         const sql = `
-            SELECT userName, phoneNo, role
+            SELECT id, userName, phoneNo, role
             FROM user
             WHERE role = 'CUSTOMER'
         `;

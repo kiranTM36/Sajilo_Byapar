@@ -35,7 +35,7 @@ const authorize = (role) => {
                         message : "Access Denied"
                     })
                 }
-                req.user = user
+                req.user = result[0]
 
                 next()
             })

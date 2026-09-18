@@ -7,6 +7,8 @@ import Customer from './pages/Customer'
 import Credit from './pages/Credit'
 import CustomerEdit from './auth/CustomerEdit'
 import CustomerLogin from './auth/CustomerLogin'
+import SingleProduct from './pages/SingleProduct'
+import SingleCustomer from './pages/SingleCustomer'
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
 
         <Route path='/customer/edit' element={<CustomerEdit />} />
         <Route path='/login' element={<CustomerLogin />} />
+        <Route path='product/:id' element={<SingleProduct />} />
+        <Route path='user/:id' element={<SingleCustomer />} />
 
       </Routes>
 

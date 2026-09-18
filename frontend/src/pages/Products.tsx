@@ -3,21 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
 import { getProducts } from '../store/productSlice'
 import { getCategory } from '../store/categorySlice'
+import { Link } from 'react-router-dom'
+import config from '../config/config'
 
-// interface categoryData {
-//   id : number
-//   categoryName : string
-// }
 
 const Products = () => {
 
   const dispatch = useDispatch<AppDispatch>()
 
   const { category } = useSelector((state : RootState )=> state.category)
-  // const { products , status } = useSelector((state : RootState) => state.product)
+
 
   useEffect(() => {
-    // dispatch(getProducts())
     dispatch(getCategory())
   } , [dispatch])
   
@@ -25,6 +22,14 @@ const Products = () => {
   console.log(category)
 
   console.log(category , status)
+
+  const { products } = useSelector((state:RootState) => state.product)
+
+  useEffect(() => {
+    dispatch(getProducts())
+  }, [dispatch])
+
+  console.log(products)
   return (
     <div >
       <div className='w-full mb-[2vh]'>
@@ -85,7 +90,18 @@ const Products = () => {
               </thead>
 
               <tbody className='w-full text-sm'>
-                
+                {
+                  products?.map((product) => (
+                    <tr className='text-center text-gray-500 bg-white border border-gray-200' key={product.id}>
+                      <td className='px-5 py-2 font-medium w-[8%]'><div className='h-12.5 w-full'><img className='h-full w-full object-cover' src={`${config}uploads/${product.image}`} alt="" /></div></td>
+                      <td className='px-5 py-4 font-medium'><Link to={`/product/${product.id}`}>{product.productName}</Link></td>
+                      <td className='px-5 py-4 font-medium'>{product.categoryName}</td>
+                      <td className='px-5 py-4 font-medium'>Rs {product.price}</td>
+                      <td className='px-5 py-4 font-medium'>{product.description}</td>
+                      <td className='px-5 py-4 font-medium'>Action</td>
+                  </tr>
+                  ))
+                }
 
               </tbody>
             </table>

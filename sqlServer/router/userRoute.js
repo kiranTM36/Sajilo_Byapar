@@ -9,7 +9,7 @@ router.get('/all', getAllUser)
 
 router.get('/:id' , getSingleUser)
 
-router.delete('/:id' , auth("ADMIN"), deleteUser)
+router.delete('/:id' ,auth('ADMIN'), deleteUser)
 
 router.get('/all/customer' , getAllCustomer)
 

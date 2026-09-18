@@ -97,7 +97,7 @@ const CustomerForm: React.FC<customerFormProps> = ({ name, onEvent }) => {
                         />
                     </div>
 
-                    {name === "Add" || name === "Login" && (
+                    {(name === "Add" || name === "Login") && (
                         <div className="flex flex-col gap-2">
 
                             <label

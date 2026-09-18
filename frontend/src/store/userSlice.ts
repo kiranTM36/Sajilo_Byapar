@@ -139,3 +139,43 @@ export function getAllCustomer() {
         }
     }
 }
+
+export function deleteUser(id: number){
+    return async function deleteUserThunk(dispatch:any) {
+
+        dispatch(setStatus(STATUSES.LOADING))
+
+        try {
+            const response = await axios.delete(`${config}user/${id}` , 
+                {
+                    withCredentials : true
+                }
+            )
+
+            if(response.status === 201 || response.status === 200){
+                alert("user Deleted")
+                return true
+            }
+        } catch (error) {
+            
+        }
+        
+    }
+}
+
+export function getSingleUser(id : number){
+    return async function getSingleUserThunk(dispatch : any){
+        dispatch(setStatus(STATUSES.LOADING))
+
+        try {
+            const response = await axios.get(`${config}user/${id}`)
+
+            if(response.status >= 200 || response.status < 300){
+                dispatch(setuser(response.data.user))
+                dispatch(setStatus(STATUSES.SUCCESS))
+            }
+        } catch (error) {
+            dispatch(setStatus(STATUSES.ERROR))
+        }
+    }
+}

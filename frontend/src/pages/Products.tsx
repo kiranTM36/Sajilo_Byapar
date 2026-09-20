@@ -1,4 +1,4 @@
-import  { useEffect } from 'react'
+import  { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
 import { getProducts } from '../store/productSlice'
@@ -9,6 +9,7 @@ import config from '../config/config'
 
 const Products = () => {
 
+  const [search , setSearch] = useState('')
   const dispatch = useDispatch<AppDispatch>()
 
   const { category } = useSelector((state : RootState )=> state.category)
@@ -29,7 +30,7 @@ const Products = () => {
     dispatch(getProducts())
   }, [dispatch])
 
-  console.log(products)
+  const searchProduct = products.filter((product) => product.productName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
   return (
     <div >
       <div className='w-full mb-[2vh]'>
@@ -62,7 +63,7 @@ const Products = () => {
       <div className='px-5'>
         <div className='h-[10vh] w-full border px-4 flex justify-between items-center border-gray-200 rounded-md bg-white mb-3'>
           <div className='w-[83%] border border-gray-200 h-[5vh] relative rounded-md overflow-hidden'>
-            <input type="text" placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
+            <input type="text" onChange={(e)=>(setSearch(e.target.value))} value={search} placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
             <button className='absolute top-0 right-0 h-full w-[3vw] bg-[#00855D] text-white'><i className="fa-solid fa-magnifying-glass"></i></button>
           </div>
 
@@ -91,7 +92,7 @@ const Products = () => {
 
               <tbody className='w-full text-sm'>
                 {
-                  products?.map((product) => (
+                  searchProduct?.map((product) => (
                     <tr className='text-center text-gray-500 bg-white border border-gray-200' key={product.id}>
                       <td className='px-5 py-2 font-medium w-[8%]'><div className='h-12.5 w-full'><img className='h-full w-full object-cover' src={`${config}uploads/${product.image}`} alt="" /></div></td>
                       <td className='px-5 py-4 font-medium'><Link to={`/product/${product.id}`}>{product.productName}</Link></td>

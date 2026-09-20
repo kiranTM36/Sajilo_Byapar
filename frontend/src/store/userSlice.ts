@@ -36,7 +36,7 @@ const initialState : userState = {
     user : null ,
     status : '' ,
     token : '',
-    customers : []
+    customers : [],
 
 }
 

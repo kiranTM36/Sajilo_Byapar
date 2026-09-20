@@ -50,6 +50,7 @@ const addProduct = async (req, res) => {
 }
 
 const getProduct = async (req, res) => {
+    try {
         const sql = `
             SELECT 
     p.id,
@@ -83,10 +84,16 @@ ON p.categoryId = c.id;
                 products: result
             })
         })
-    } 
+    } catch (error) {
+        console.log(err);
+
+    }
+}
 const getSingleProduct = (req, res) => {
-        const {id} = req.params
-        const sql = `
+    const {
+        id
+    } = req.params
+    const sql = `
             SELECT 
     p.id, 
     p.productName, 
@@ -101,58 +108,69 @@ WHERE p.id = ?;
 
         `
 
-        db.query(sql, [id], (err, result) => {
-            if (err) {
-                console.log(err)
-                return res.status(401).json({
-                    success: false,
-                    message: "SQL Error"
-                })
-            }
-            if (result.length === 0) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Product Not Found"
-                })
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: "Product Found",
-                product: result[0]
-            })
-        })
-    } 
-
-const deleteProduct = (req, res) => {
-    const {id} = req.params
-
-    const sql = `
-        DELETE FROM product WHERE id=?
-    `
-
-    db.query(sql , [id] , (err , result) => {
-        if(err){
-            console.log("Error" , err)
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.log(err)
             return res.status(401).json({
-                message : "Error", 
-                success : false
+                success: false,
+                message: "SQL Error"
             })
         }
-        if(result.affectedRows === 0){
-            console.log("No product Available")
+        if (result.length === 0) {
             return res.status(404).json({
-                message : "No product Available", 
-                success : false
+                success: false,
+                message: "Product Not Found"
             })
         }
 
-        console.log(result[0])
-        res.status(200).json({
-            message : "Product Deleted",
-            success : true 
+        return res.status(200).json({
+            success: true,
+            message: "Product Found",
+            product: result[0]
         })
     })
 }
-    
-module.exports = { addProduct ,getSingleProduct , getProduct , deleteProduct}
+
+const deleteProduct = (req, res) => {
+    try {
+        const {
+            id
+        } = req.params
+
+        const sql = `
+        DELETE FROM product WHERE id=?
+    `
+
+        db.query(sql, [id], (err, result) => {
+            if (err) {
+                console.log("Error", err)
+                return res.status(401).json({
+                    message: "Error",
+                    success: false
+                })
+            }
+            if (result.affectedRows === 0) {
+                console.log("No product Available")
+                return res.status(404).json({
+                    message: "No product Available",
+                    success: false
+                })
+            }
+
+            console.log(result[0])
+            res.status(200).json({
+                message: "Product Deleted",
+                success: true
+            })
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+module.exports = {
+    addProduct,
+    getSingleProduct,
+    getProduct,
+    deleteProduct
+}

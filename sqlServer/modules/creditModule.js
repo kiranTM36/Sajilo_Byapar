@@ -4,17 +4,15 @@ const createCreditTable = () => {
 
     const sql = `
         CREATE TABLE IF NOT EXISTS credit(
-            id INT PRIMARY KEY AUTO_INCREMENT , 
-            userId INT NOT NULL ,
+            id INT PRIMARY KEY AUTO_INCREMENT ,
             salesId INT NOT NULL ,
+            customerId INT NOT NULL ,
             creditAmount DECIMAL(12 , 2) NOT NULL,
             paidAmount DECIMAL(12 , 2) DEFAULT 0,
-            dueDate DATE ,
-            status ENUM('PENDING', 'PAID', 'PARTIAL') DEFAULT 'PENDING',
+            dueDate DATETIME DEFAULT CURRENT_TIMESTAMP ,
 
-
-            FOREIGN KEY (userId) REFERENCES user(id) ,
-            FOREIGN KEY (salesId) REFERENCES sales(id)
+            FOREIGN KEY (salesId) REFERENCES sales(id),
+            FOREIGN KEY (customerId) REFERENCES user(id)
         )
     `;
 

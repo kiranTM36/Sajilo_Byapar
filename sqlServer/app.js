@@ -22,6 +22,7 @@ inventoryModule()
 const userRoute = require('./router/userRoute')
 const categoryRoute = require('./router/categoryRoute')
 const productRoute = require('./router/productRoute')
+const salesRoute = require('./router/salesRoute')
 
 const app = express()
 
@@ -40,6 +41,7 @@ app.use('/uploads', express.static('uploads'))
 app.use('/user' , userRoute)
 app.use('/category' , categoryRoute)
 app.use('/product' , productRoute)
+app.use('/sales' , salesRoute)
 
 
 app.listen(8000, () => {

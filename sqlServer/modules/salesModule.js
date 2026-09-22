@@ -2,17 +2,15 @@ const db = require('../db');
 
 const createSalesTable = () => {
     const sql = `
-        CREATE TABLE IF NOT EXISTS sales (
-            id INT PRIMARY KEY AUTO_INCREMENT,
-            customerId INT,
-            totalAmount DECIMAL(12, 2) NOT NULL,
-            paidAmount DECIMAL(12, 2) DEFAULT 0,
-            remainingAmount DECIMAL(12, 2) DEFAULT 0,
-            paymentStatus ENUM('PAID', 'PARTIAL', 'CREDIT') DEFAULT 'PAID',
-            saleDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+            CREATE TABLE IF NOT EXISTS sales (
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        customerId INT,
+                        totalAmount DECIMAL(12, 2) NOT NULL,
+                        paidAmount DECIMAL(12, 2) DEFAULT 0,
+                        saleDate DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-            FOREIGN KEY (customerId) REFERENCES user(id)
-        )
+                        FOREIGN KEY (customerId) REFERENCES user(id)
+                    )
     `;
 
     db.query(sql, err => {

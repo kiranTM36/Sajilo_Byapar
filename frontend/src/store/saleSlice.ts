@@ -1,59 +1,59 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
+import { STATUSES } from "../status/STATUSES"
+import axios from "axios"
+import config from "../config/config"
 
-interface Product {
-  id: number
-  productName: string
-  categoryId: number
-  categoryName: string
-  price: number
-  image: string
-  description: string
+interface sales {
+    id : number,
+    userName : string ,
+    paidAmount : number ,
+    totalAmount : number
+    saleDate : Date
 }
 
-interface CartItem extends Product {
-  quantity: number
+interface salesState {
+    sales : sales[],
+    sale : sales | null ,
+    status : string
 }
 
-interface ProductState {
-  items: CartItem[]
+const initialState : salesState = {
+    sales : [],
+    sale : null ,
+    status : ""
 }
 
-const initialState: ProductState = {
-  items: [],
-}
-
-const saleSlice = createSlice({
-  name: 'sales',
-  initialState,
-  reducers: {
-    addToSale(state, action: PayloadAction<Product>) {
-      const existingItem = state.items.find((item) => item.id === action.payload.id)
-      if (existingItem) {
-        existingItem.quantity++
-      } else {
-        state.items.push({ ...action.payload, quantity: 1 })
-      }
-    },
-    increaseQty(state, action: PayloadAction<number>) {
-      const item = state.items.find((item) => item.id === action.payload)
-      if (item) {
-        item.quantity++
-      }
-    },
-
-    decreaseQty(state , action : PayloadAction <number>){
-        const item = state.items.find((item)=> item.id === action.payload)
-
-        if(item){
-            item.quantity --
+const salesSlice = createSlice({
+    name : 'sales',
+    initialState ,
+    reducers : {
+        setsales(state , action : PayloadAction<sales[]>){
+            state.sales = action.payload
+        },
+        setsale(state , action : PayloadAction<sales>){
+            state.sale = action.payload
+        },
+        setStatus(state , action : PayloadAction <string>){
+            state.status = action.payload
         }
-    },
-
-    removeFromSales(state , action : PayloadAction <number>){
-        state.items = state.items.filter((item) => item.id !== action.payload)
     }
-  },
 })
 
-export const { addToSale, increaseQty , removeFromSales , decreaseQty } = saleSlice.actions
-export default saleSlice.reducer
+export const { setsale , setsales , setStatus } = salesSlice.actions
+export default salesSlice.reducer
+
+export function getAllsales(){
+    return async function getAllsalesorThunk(dispatch : any){
+        dispatch(setStatus(STATUSES.LOADING))
+
+        try {
+            const response = await axios.get(`${config}sales/view`)
+            if(response.status == 200 || response.status === 201){
+                dispatch(setsales(response.data.sales))
+                dispatch(setStatus(STATUSES.SUCCESS))
+            }
+        } catch (error) {
+            
+        }
+    }
+}

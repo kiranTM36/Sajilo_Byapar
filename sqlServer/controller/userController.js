@@ -30,7 +30,7 @@ const createUser = (req, res) => {
             return res.status(201).json({
                 success: true,
                 message: "user created successfully",
-                customerId: result.insertId
+                result
             });
         });
     } catch (error) {

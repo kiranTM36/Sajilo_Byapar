@@ -7,7 +7,8 @@ interface customerData {
     id : number
     userName: string
     phoneNo: string
-    role: string
+    role: string,
+    createdAt : Date
 }
 
 interface createCustomer {

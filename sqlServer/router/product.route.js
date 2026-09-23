@@ -3,7 +3,7 @@ const { addProduct, getProduct, getSingleProduct, deleteProduct } = require('../
 const multer = require('../middleware/multer')
 const auth = require('../middleware/authorization')
 
-router.post('/add' ,auth("ADMIN"),multer.single('image'), addProduct)
+router.post('/add' ,multer.single('image'), addProduct)
 
 router.get('/get' , getProduct )
 

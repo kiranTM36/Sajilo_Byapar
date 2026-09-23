@@ -1,6 +1,6 @@
 const db = require('../db')
 
-const addProduct = async (req, res) => {
+const addProduct =  (req, res) => {
     try {
         const {
             productName,
@@ -49,7 +49,7 @@ const addProduct = async (req, res) => {
     }
 }
 
-const getProduct = async (req, res) => {
+const getProduct =  (req, res) => {
     try {
         const sql = `
             SELECT 

@@ -76,7 +76,7 @@ const deleteCategory = (req , res) => {
         `
         db.query(sql,[id] , (err , result) => {
             if(err){
-                return res.status(401).json({
+                return res.status(500).json({
                     success : false ,
                     message : "Failed to delete Category"
                 })
@@ -105,4 +105,66 @@ const deleteCategory = (req , res) => {
     }
 }
 
-module.exports = { createCategory , getAllCategory , deleteCategory }
+const updateCategory = (req, res) => {
+    try {
+        const {id} = req.params;
+
+        const {categoryName} = req.body
+
+        const sql = `
+            UPDATE category SET categoryName = ? WHERE id = ?
+        `
+
+        db.query(sql , [categoryName], (err , result) => {
+            if(err){
+                return res.status(500).json({
+                    success : false ,
+                    message : "Failed to Update Category"
+                })
+            }
+            if(result.affectedRows === 0){
+                return res.status(404).json({
+                    success : false,
+                    message : "Category Not Updated",
+                })
+            }
+
+            res.status(200).json({
+                success : true ,
+                message : "Category Updated Successfully",
+                result
+            })
+        })
+    } catch (error) {
+        
+    }
+}
+
+const getSingleCategory = (req , res) => {
+    try {
+        const {id} = req.params;
+
+        const sql = `
+        SELECT * FROM category WHERE id=?
+        `
+
+        db.query(sql , [id] , (err , result) => {
+            if(err){
+                return res.status(500).json({
+                    success : false ,
+                    message : "Failed to delete Category"
+                })
+            }
+
+            res.status(200).json({
+                success : true ,
+                message : "Category Deleted Successfully",
+                category : result[0]
+            })
+        })
+    } catch (error) {
+        
+    }
+}
+
+module.exports = { createCategory , getAllCategory , deleteCategory , updateCategory , getSingleCategory }

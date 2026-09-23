@@ -1,5 +1,6 @@
 const db = require('../db');
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 
 const createUser = (req, res) => {
@@ -11,10 +12,13 @@ const createUser = (req, res) => {
         (userName, phoneNo, password, email) VALUES (?, ?, ?, ?)
         `;
 
+        const genSalt = bcrypt.genSaltSync(10)
+        const hashPassword = bcrypt.hashSync(data.password , genSalt)
+
         const values = [
             data.userName,
             data.phoneNo,
-            data.password,
+            hashPassword,
             data.email
         ];
 
@@ -150,7 +154,7 @@ const deleteUser = (req, res) => {
 const getAllCustomer = (req, res) => {
     try {
         const sql = `
-            SELECT id, userName, phoneNo, role
+            SELECT id, userName, phoneNo, role , createdAt
             FROM user
             WHERE role = 'CUSTOMER'
         `;
@@ -221,7 +225,9 @@ const userLogin = (req, res) => {
 
             const user = result[0]
 
-            if (password !== user.password) {
+            const matchPass = bcrypt.compareSync(password , user.password)
+
+            if (!matchPass) {
                 return res.status(400).json({
                     message: "Invalid User"
                 })
@@ -237,12 +243,13 @@ const userLogin = (req, res) => {
             res.cookie("token", token, {
                     httpOnly: true,
                     secure: false,
-                    maxAge: 60 * 60 * 60
+                    maxAge: 30 * 24 * 60 * 60 * 1000
                 })
 
             return res.status(200).json({
                 message: "Login Successful",
-                token : token
+                token : token ,
+                user : user
             })
         })
 
@@ -255,4 +262,39 @@ const userLogin = (req, res) => {
     }
 }
 
-module.exports = { createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer , userLogin};
+const updateuser = (req ,res) => {
+    try {
+        const {id} = req.params;
+
+        const {userName , phoneNo , email , role , password} = req.body
+
+        const sql = `
+            UPDATE user SET userName=? ,  phoneNo=? , email=?, role=?, password=? WHERE id=?
+        `
+
+        db.query(sql , [userName,phoneNo,email,role,password,id] , (err , result) => {
+            if(err){
+                return res.status(500).json({
+                    success : false ,
+                    message : "Failed to update"
+                })
+            }
+            if(result.affectedRows === 0){
+                return res.status(404).json({
+                    success : false,
+                    message : "Failed to Update category",
+                })
+            }
+
+            res.status(200).json({
+                success : true ,
+                message : "Updated Successfully",
+                result
+            })
+        })
+    } catch (error) {
+        
+    }
+}
+
+module.exports = { createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer , userLogin , updateuser};

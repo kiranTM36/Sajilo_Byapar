@@ -5,8 +5,9 @@ const createInventoryTable = () => {
     const sql = `
         CREATE TABLE IF NOT EXISTS inventory (
             id INT PRIMARY KEY AUTO_INCREMENT,
-            productId INT NOT NULL UNIQUE,
+            productId INT NOT NULL,
             quantity INT NOT NULL DEFAULT 0,
+            purchaseDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
             FOREIGN KEY (productId) REFERENCES product(id)
         )

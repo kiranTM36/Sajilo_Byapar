@@ -31,6 +31,8 @@ const Products = () => {
   }, [dispatch])
 
   const searchProduct = products.filter((product) => product.productName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+
+  const handleFilter = products.filter((product) => product.categoryId)
   return (
     <div >
       <div className='w-full mb-[2vh]'>

@@ -97,7 +97,7 @@ const Customer = () => {
                   <th className='px-5 py-2 font-medium'>PHONE</th>
                   <th className='px-5 py-2 font-medium'>TOTAL PURCHASE</th>
                   <th className='px-5 py-2 font-medium'>OUTSTANDING CREDIT</th>
-                  <th className='px-5 py-2 font-medium'>LAST PURCHASE</th>
+                  <th className='px-5 py-2 font-medium'>JOINING DATE</th>
                   <th className='px-5 py-2 font-medium'>ACTION</th>
                 </tr>
               </thead>
@@ -110,7 +110,11 @@ const Customer = () => {
                       <td className='py-4 px-5 font-medium'>{customer.phoneNo}</td>
                       <td className='py-4 px-5 font-medium'>Rs 20</td>
                       <td className='py-4 px-5 font-normal'>{customer.role}</td>
-                      <td className='py-4 px-5 font-medium'>Jan 1</td>
+                      <td className='py-4 px-5 font-medium'>{new Date(customer.createdAt).toLocaleDateString("ne-NP", {
+                        year : "numeric",
+                        month : "short",
+                        day : "2-digit" 
+                      })}</td>
                       <td>
                         <Link to="/customer/edit"><button className='px-2.5 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 mr-1'>Edit</button></Link>
                         <button onClick={()=>handleDelete(customer.id)} className='px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700' >Delete</button>

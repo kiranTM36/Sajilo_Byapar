@@ -5,7 +5,7 @@ import { getAllsales } from '../store/saleSlice'
 
 const Sales = () => {
 
-    const [search , setSearch ] = useState('')
+    const [search, setSearch] = useState('')
     const dispatch = useDispatch<AppDispatch>()
     const { sales, status } = useSelector((state: RootState) => state.sales)
 
@@ -13,7 +13,7 @@ const Sales = () => {
         dispatch(getAllsales())
     }, [dispatch])
 
-    const searchSales = sales.filter((sale) => sale.userName.toLocaleLowerCase().includes(search.toLocaleLowerCase()) )
+    const searchSales = sales.filter((sale) => sale.userName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
 
 
     return (
@@ -24,7 +24,7 @@ const Sales = () => {
                 <div>
                     <div className='h-[10vh] w-full border px-4 flex justify-between items-center border-gray-200 rounded-md bg-white mb-3'>
                         <div className='w-[83%] border border-gray-200 h-[5vh] relative rounded-md overflow-hidden'>
-                            <input type="text" onChange={(e)=> setSearch(e.target.value)} value={search} placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
+                            <input type="text" onChange={(e) => setSearch(e.target.value)} value={search} placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
                             <button className='absolute top-0 right-0 h-full w-[3vw] bg-[#00855D] text-white'><i className="fa-solid fa-magnifying-glass"></i></button>
                         </div>
 
@@ -54,27 +54,27 @@ const Sales = () => {
                                                 <td className='px-5 py-4 text-gray-600'>
                                                     <span className='text-gray-800 font-semibold'>{sale.userName}</span>
                                                 </td>
-                                                
+
                                                 <td className='px-5 py-4 text-gray-600'>{sale.totalAmount}</td>
                                                 <td className='px-5 py-4 text-gray-600'>{sale.paidAmount}</td>
                                                 <td className='px-5 py-4 text-gray-600'>{Number(sale.totalAmount) - Number(sale.paidAmount)}</td>
 
-                                                {Number(sale.paidAmount) === 0 ? 
-                                                <td className='px-5 py-4 text-red-600'><span className='bg-red-50 text-[12px] px-2 py-1 rounded-md'>credit</span></td>  :
-                                                Number(sale.paidAmount) === Number(sale.totalAmount) ?
-                                                 <td className='px-5 py-4 text-green-600'><span className='bg-green-50 text-[12px] px-2 py-1 rounded-md'>paid</span></td> :
-                                                  <td className='px-5 py-4 text-yellow-600'><span className='bg-yellow-50 text-[12px] px-2 py-1 rounded-md'>partial</span></td>}
-                                                
+                                                {Number(sale.paidAmount) === 0 ?
+                                                    <td className='px-5 py-4 text-red-600'><span className='bg-red-50 text-[12px] px-2 py-1 rounded-md'>credit</span></td> :
+                                                    Number(sale.paidAmount) === Number(sale.totalAmount) ?
+                                                        <td className='px-5 py-4 text-green-600'><span className='bg-green-50 text-[12px] px-2 py-1 rounded-md'>paid</span></td> :
+                                                        <td className='px-5 py-4 text-yellow-600'><span className='bg-yellow-50 text-[12px] px-2 py-1 rounded-md'>partial</span></td>}
+
                                                 <td className='px-5 py-4 text-gray-600'>
-    {new Date(sale.saleDate).toLocaleDateString("ne-NP", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-    })}
-</td>
+                                                    {new Date(sale.saleDate).toLocaleDateString("ne-NP", {
+                                                        year: "numeric",
+                                                        month: "short",
+                                                        day: "numeric",
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                        hour12: true,
+                                                    })}
+                                                </td>
 
                                             </tr>
                                         ))

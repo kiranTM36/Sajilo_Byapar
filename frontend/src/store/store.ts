@@ -3,6 +3,7 @@ import productSlice from './productSlice'
 import userSlice from './userSlice'
 import categorySlice from './categorySlice'
 import salesSlice from './saleSlice'
+import inventorySlice from './inventorySlice' 
 
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
         product : productSlice ,
         sales : salesSlice,
         user : userSlice ,
-        category : categorySlice
+        category : categorySlice,
+        inventory : inventorySlice
     }
 }) 
 

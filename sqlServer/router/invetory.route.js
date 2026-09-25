@@ -4,6 +4,6 @@ const auth = require('../middleware/authorization')
 
 router.post('/add' , createInventory)
 
-router.get('/view' , showInventory)
+router.get('/' , showInventory)
 
 module.exports = router

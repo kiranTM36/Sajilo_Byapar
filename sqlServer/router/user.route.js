@@ -3,7 +3,7 @@ const auth = require('../middleware/authorization')
 
 const { createUser , getAllUser , getSingleUser , deleteUser , getAllCustomer, userLogin } = require('../controller/userController');
 
-router.post('/add', createUser);
+router.post('/signup', createUser);
 
 router.get('/all', getAllUser)
 

@@ -9,7 +9,7 @@ const createUser = (req, res) => {
         
         const sql = `
         INSERT INTO user
-        (userName, phoneNo, password, email) VALUES (?, ?, ?, ?)
+        (userName, phoneNo, password) VALUES (?, ?, ?)
         `;
 
         const genSalt = bcrypt.genSaltSync(10)
@@ -19,7 +19,6 @@ const createUser = (req, res) => {
             data.userName,
             data.phoneNo,
             hashPassword,
-            data.email
         ];
 
         db.query(sql, values , (err, result) => {

@@ -9,6 +9,7 @@ import CustomerEdit from './auth/CustomerEdit'
 import CustomerLogin from './auth/CustomerLogin'
 import SingleProduct from './pages/SingleProduct'
 import SingleCustomer from './pages/SingleCustomer'
+import Inventory from './pages/Inventory'
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path='/products' element={<Products />} />
           <Route path='/customers' element={<Customer />} />
           <Route path='/credit' element={<Credit />} />
+          <Route path='/inventory' element={<Inventory />} />
         </Route>
 
         <Route path='/customer/edit' element={<CustomerEdit />} />

@@ -2,17 +2,26 @@ const db = require('../db')
 
 const createInventory = (req , res) => {
     try {
-        const {productId , quantity , purchaseDate} = req.body
+        const { batchNo, items , purchaseDate} = req.body
+
+        const values = items.map((item) => [
+            batchNo,
+            item.productId ,
+            item.quantity,
+            item.purchasedPrice,
+            purchaseDate
+        ])
 
         const sql = `
-        INSERT INTO inventory (productId , quantity , purchaseDate) VALUES (?,?,?)
+        INSERT INTO inventory (batchNo,productId , quantity,purchasedPrice , purchaseDate) VALUES ?
         `
 
-        db.query(sql ,[productId , quantity , purchaseDate], (err, result) => {
+        db.query(sql ,[values], (err, result) => {
             if(err){
                 return res.status(500).json({
                     success : false ,
-                    message : "Failed Insert Data"
+                    message : "Failed Insert Data",
+                    err
                 })
             }
 
@@ -33,6 +42,8 @@ const showInventory = (req, res) => {
             SELECT 
                 i.id,
                 i.quantity,
+                i.batchNo,
+                i.purchasedPrice,
                 i.purchaseDate,
                 p.id AS productId,
                 p.productName,
@@ -55,7 +66,7 @@ const showInventory = (req, res) => {
 
             return res.status(200).json({
                 success: true,
-                result
+                inventory : result
             });
         });
 

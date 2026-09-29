@@ -13,7 +13,7 @@ const Home = () => {
           <Sidenav />
         </div>
 
-        <div className="bg-[#F8F9FF] h-full overflow-y-auto overflow-x-hidden">
+        <div className="bg-[#F8F9FF] h-full overflow-y-auto overflow-x-hidden scrollbar-none">
           <Outlet />
         </div>
 

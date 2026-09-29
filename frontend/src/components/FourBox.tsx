@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { use } from 'react'
+
+interface User {
+  userName: string;
+}
 
 const FourBox = () => {
+  const user: User | null = JSON.parse(localStorage.getItem('User') || 'null');
+  const userName = user?.userName || 'User';
   return (
     <div className='w-full'>
         <div>
         <div className='px-5 flex justify-between items-center h-[10vh]'>
 
           <div>
-            <h1 className='text-xl font-bold text-gray-800'>Good Morining</h1>
+            <h1 className='text-xl font-bold text-gray-800'>Hello {userName}👏</h1>
             <p className='text-sm text-gray-500'>Here is Your activities</p>
           </div>
 

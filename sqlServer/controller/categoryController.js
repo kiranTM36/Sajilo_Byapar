@@ -10,7 +10,7 @@ const createCategory = ( req, res ) => {
         `
 
         const values = [
-            data.categoryName
+            data.categoryName //dairy
         ]
 
         db.query(sql, values , (err  , result) => {

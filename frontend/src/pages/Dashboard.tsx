@@ -1,6 +1,20 @@
+import { useDispatch, useSelector } from 'react-redux'
 import FourBox from '../components/FourBox'
+import { type AppDispatch, type RootState } from '../store/store'
+import { useEffect } from 'react'
+import { showInventory } from '../store/inventorySlice'
 
 const Dashboard = () => {
+
+  const dispatch = useDispatch<AppDispatch>()
+
+  const { inventory } = useSelector((state: RootState) => state.inventory)
+
+  useEffect(() => {
+    dispatch(showInventory())
+  }, [dispatch])
+
+  console.log(inventory)
   return (
     <div className='w-full flex flex-col gap-5'>
 
@@ -221,7 +235,7 @@ const Dashboard = () => {
 
         </div>
 
-     
+
         <div className='h-[58vh] bg-white shadow-sm border border-gray-200 rounded-xl flex flex-col overflow-hidden'>
 
           <div className='px-4 py-4 border-b border-gray-200 shrink-0'>
@@ -251,109 +265,29 @@ const Dashboard = () => {
 
           <div className='flex flex-col gap-2 p-3 overflow-y-auto scrollbar-none'>
 
-            <div className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
+            {
+              inventory.map((product) => (
+                <div className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
 
-              <div className='flex justify-between items-center'>
+                  <div className='flex justify-between items-center'>
 
-                <h3 className='font-semibold text-gray-800'>
-                  Noodles
-                </h3>
+                    <h3 className='font-semibold text-gray-800'>
+                      {product.productName}
+                    </h3>
 
-                <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-700 rounded-md'>
-                  Low Stock
-                </span>
+                    <span className={`px-2 py-1 text-xs font-medium rounded-md ${product.quantity>10 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
+                      Low Stock
+                    </span>
 
-              </div>
+                  </div>
 
-              <p className='text-sm text-gray-500 mt-1'>
-                2 packets left
-              </p>
+                  <p className='text-sm text-gray-500 mt-1'>
+                    {product.quantity} packets left
+                  </p>
 
-            </div>
-
-
-            <div className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
-
-              <div className='flex justify-between items-center'>
-
-                <h3 className='font-semibold text-gray-800'>
-                  Cooking Oil
-                </h3>
-
-                <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-700 rounded-md'>
-                  Low Stock
-                </span>
-
-              </div>
-
-              <p className='text-sm text-gray-500 mt-1'>
-                3 bottles left
-              </p>
-
-            </div>
-
-
-            <div className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
-
-              <div className='flex justify-between items-center'>
-
-                <h3 className='font-semibold text-gray-800'>
-                  Biscuits
-                </h3>
-
-                <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-700 rounded-md'>
-                  Low Stock
-                </span>
-
-              </div>
-
-              <p className='text-sm text-gray-500 mt-1'>
-                4 packets left
-              </p>
-
-            </div>
-
-
-            <div className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
-
-              <div className='flex justify-between items-center'>
-
-                <h3 className='font-semibold text-gray-800'>
-                  Salt
-                </h3>
-
-                <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-700 rounded-md'>
-                  Low Stock
-                </span>
-
-              </div>
-
-              <p className='text-sm text-gray-500 mt-1'>
-                2 packets left
-              </p>
-
-            </div>
-
-
-            <div className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
-
-              <div className='flex justify-between items-center'>
-
-                <h3 className='font-semibold text-gray-800'>
-                  Tea
-                </h3>
-
-                <span className='px-2 py-1 text-xs font-medium bg-orange-100 text-orange-700 rounded-md'>
-                  Low Stock
-                </span>
-
-              </div>
-
-              <p className='text-sm text-gray-500 mt-1'>
-                1 packet left
-              </p>
-
-            </div>
+                </div>
+              ))
+            }
 
           </div>
 

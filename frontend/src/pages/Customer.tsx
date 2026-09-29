@@ -1,27 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
-import { deleteUser, getAllCustomer, signUp } from '../store/userSlice'
-import CustomerForm, { type customerData } from '../auth/CustomerForm'
+import { deleteUser, getAllCustomer } from '../store/userSlice'
 import { Link } from 'react-router-dom'
+import AddCustomer from '../auth/AddCustomer'
 
 const Customer = () => {
 
   const [showForm, setShowForm] = useState(false)
   const dispatch = useDispatch<AppDispatch>()
 
-  const [search , setSearch] = useState('')
+  const [search, setSearch] = useState('')
 
-  const handleDelete = (id : number) => {
+  const handleDelete = (id: number) => {
     dispatch(deleteUser(id))
   }
 
-  const handleAddCustomer = async (data: customerData) => {
-    const success = await dispatch(signUp(data))
-    if (success) {
-      alert("Addded")
-    }
-  }
 
   const { customers, status } = useSelector((state: RootState) => state.user)
 
@@ -56,7 +50,7 @@ const Customer = () => {
                     <button className='absolute top-[14vh] right-[35vw] h-[3vh] w-[3vh] text-center text-white bg-red-600 rounded-full text-sm hover:scale-105 cursor-pointer'
                       onClick={() => setShowForm(false)}
                     ><i className="fa-solid fa-x"></i></button>
-                    <CustomerForm name='Add' onEvent={handleAddCustomer} />
+                    <AddCustomer />
                   </div>
                 </div>
               )
@@ -75,10 +69,10 @@ const Customer = () => {
         </div>
       </div>
 
-      <div className='px-5'>
+      <div className='px-5 pb-4'>
         <div className='h-[10vh] w-full border px-4 flex justify-between items-center border-gray-200 rounded-md bg-white mb-3'>
           <div className='w-[83%] border border-gray-200 h-[5vh] relative rounded-md overflow-hidden'>
-            <input type="text" onChange={(e)=>setSearch(e.target.value)} value={search} placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
+            <input type="text" onChange={(e) => setSearch(e.target.value)} value={search} placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
             <button className='absolute top-0 right-0 h-full w-[3vw] bg-[#00855D] text-white'><i className="fa-solid fa-magnifying-glass"></i></button>
           </div>
 
@@ -88,8 +82,8 @@ const Customer = () => {
             <option value="">Paid</option>
           </select>
         </div>
-        <div className='h-[68vh] w-full border border-gray-200 rounded-md bg-white'>
-          <div>
+        <div className='h-[78vh] w-full border border-gray-200 rounded-md  overflow-x-hidden overflow-y-auto'>
+          <div className=''>
             <table className='w-full text-sm'>
               <thead className='text-gray-50 border-b border-gray-200 sticky top-0'>
                 <tr className='text-center text-gray-500 bg-[#EEF4FF]'>
@@ -102,22 +96,22 @@ const Customer = () => {
                 </tr>
               </thead>
 
-              <tbody className='w-full text-sm'>
+              <tbody className='w-full text-sm overflow-x-hiddden bg-white overflow-y-auto'>
                 {
-                  searchCustomer?.map((customer) => (
+                  searchCustomer.reverse()?.map((customer) => (
                     <tr key={customer.id} className='w-full text-center text-gray-500 border border-gray-200 hover:bg-gray-50'>
                       <td className='py-4 px-5 font-medium w-[15%]'><Link to={`user/${customer.id}`}>{customer.userName}</Link></td>
                       <td className='py-4 px-5 font-medium'>{customer.phoneNo}</td>
                       <td className='py-4 px-5 font-medium'>Rs 20</td>
                       <td className='py-4 px-5 font-normal'>{customer.role}</td>
                       <td className='py-4 px-5 font-medium'>{new Date(customer.createdAt).toLocaleDateString("ne-NP", {
-                        year : "numeric",
-                        month : "short",
-                        day : "2-digit" 
+                        year: "numeric",
+                        month: "short",
+                        day: "2-digit"
                       })}</td>
                       <td>
                         <Link to="/customer/edit"><button className='px-2.5 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700 mr-1'>Edit</button></Link>
-                        <button onClick={()=>handleDelete(customer.id)} className='px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700' >Delete</button>
+                        <button onClick={() => handleDelete(customer.id)} className='px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700' >Delete</button>
                       </td>
                     </tr>
                   ))

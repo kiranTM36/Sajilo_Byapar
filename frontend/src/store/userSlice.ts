@@ -87,7 +87,7 @@ export function signUp(data : createCustomer ){
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.post(`${config}user/add`,data)
+            const response = await axios.post(`${config}user/signup`,data)
 
             if(response.status >= 200 || response.status < 300 ){
                 dispatch(setStatus(STATUSES.SUCCESS))

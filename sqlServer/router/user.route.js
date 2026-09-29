@@ -1,18 +1,28 @@
 const router = require('express').Router();
-const auth = require('../middleware/authorization')
 
-const { createUser , getAllUser , getSingleUser , deleteUser , getAllCustomer, userLogin } = require('../controller/userController');
+const auth = require('../middleware/authorization');
+
+const {
+    createUser,
+    getAllUser,
+    getSingleUser,
+    deleteUser,
+    getAllCustomer,
+    userLogin
+} = require('../controller/userController');
+
 
 router.post('/signup', createUser);
 
-router.get('/all', getAllUser)
+router.get('/all', getAllUser);
 
-router.get('/:id' , getSingleUser)
+router.get('/all/customer', getAllCustomer);
 
-router.delete('/:id' ,auth('ADMIN'), deleteUser)
+router.post('/login', userLogin);
 
-router.get('/all/customer' , getAllCustomer)
+router.get('/:id', getSingleUser);
 
-router.post('/login' , userLogin)
+router.delete('/:id', auth('ADMIN'), deleteUser);
+
 
 module.exports = router;

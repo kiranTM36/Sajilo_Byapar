@@ -8,7 +8,12 @@ const Navbar = () => {
                 <input type="text" className='h-[5vh] w-[20vw] rounded-md border outline-none border-gray-300 bg-blue-200' />
             </div>
 
-            <div className='w-[5vw]'></div>
+            <div className='w-[5vw]'>
+                {
+                    !localStorage.getItem('token') ? (<button>Login</button>):
+                <button>Logout</button>
+                }
+            </div>
         </div>
     )
 }

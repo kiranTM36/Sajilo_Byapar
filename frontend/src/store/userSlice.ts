@@ -3,13 +3,6 @@ import { STATUSES } from '../status/STATUSES'
 import axios from 'axios'
 import config from '../config/config'
 
-interface customerData {
-    id : number
-    userName: string
-    phoneNo: string
-    role: string,
-    createdAt : Date
-}
 
 interface createCustomer {
     userName: string
@@ -22,6 +15,8 @@ interface userData {
     userName : string
     phoneNo : string,
     password : string
+    role: string
+    createdAt : Date
 }
 
 interface userState {
@@ -29,7 +24,7 @@ interface userState {
     user : userData | null
     status : string
     token : string
-    customers : customerData[]
+    customers : userData[]
 }
 
 const initialState : userState = {
@@ -54,7 +49,7 @@ const authSlice = createSlice({
         setStatus (state , action : PayloadAction<string>){
             state.status = action.payload
         },
-        setCustomer(state , action : PayloadAction<customerData[]>){
+        setCustomer(state , action : PayloadAction<userData[]>){
             state.customers = action.payload
         },
         setToken (state , action : PayloadAction <string>){
@@ -110,9 +105,8 @@ export function login(data : createCustomer ){
 
             if(response.status === 200 ){
                 dispatch(setToken(response.data.token))
+                dispatch(setuser(response.data.user))
                 dispatch(setStatus(STATUSES.SUCCESS))
-                localStorage.setItem('User', JSON.stringify(data))
-                localStorage.setItem('token' , response.data.token)
 
                 return true
             }

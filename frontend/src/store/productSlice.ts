@@ -11,6 +11,7 @@ interface productData {
     price : number,
     image: string,
     description: string
+    quantity : number
 }
 
 interface productState {
@@ -56,7 +57,7 @@ export function getProducts() {
     return async function getProductThunk(dispatch: any) {
         dispatch(setStatus(STATUSES.LOADING))
         try {
-            const response = await axios.get(`${config}product/get`)
+            const response = await axios.get(`${config}products`)
             if (response.status === 201 || response.status === 200) {
                 dispatch(setProducts(response.data.products))
                 dispatch(setStatus(STATUSES.SUCCESS))

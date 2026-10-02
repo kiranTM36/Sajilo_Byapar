@@ -1,11 +1,28 @@
-// const db = require('../db')
+const db = require("../db")
 
-// const addSaleDetail = (req , res )=> {
-//     try {
-//         const { salesId ,products  } = req.body
+const getSingleSalesitem = (req , res) => {
+    try {
+        const {id} = req.params
 
-//         products.map((product) => product.)
-//     } catch (error) {
+        const sql = `SELECT s.* ,s.id as saleId,u.* FROM sales s join user u on s.customerId = u.id  where customerId = ?`
+
+        db.query(sql,[id], (err, result) => {
+            if(err){
+                console.log(err);
+                return res.status(500).json({
+                    message : "SQL error"
+                })
+            }
+
+            res.status(200).json({
+                message : "Expenses List",
+                sale : result
+            })
+        })
+    } catch (error) {
         
-//     }
-// }
+    }
+}
+
+
+module.exports = {getSingleSalesitem}

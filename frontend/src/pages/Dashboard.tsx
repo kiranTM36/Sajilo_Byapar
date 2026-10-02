@@ -1,24 +1,112 @@
 import { useDispatch, useSelector } from 'react-redux'
-import FourBox from '../components/FourBox'
 import { type AppDispatch, type RootState } from '../store/store'
 import { useEffect } from 'react'
 import { showInventory } from '../store/inventorySlice'
+import { getAllCustomer } from '../store/userSlice';
+import { getAllsales } from '../store/saleSlice';
+import { getProducts } from '../store/productSlice';
+
+interface User {
+  userName: string;
+}
 
 const Dashboard = () => {
 
   const dispatch = useDispatch<AppDispatch>()
+  const user: User | null = JSON.parse(localStorage.getItem('User') || 'null');
+  const userName = user?.userName || 'User';
 
-  const { inventory } = useSelector((state: RootState) => state.inventory)
+  const { products } = useSelector((state: RootState) => state.product)
+  const { customers } = useSelector((state:RootState) => state.user)
+  const { sales } = useSelector((state:RootState) => state.sales)
 
   useEffect(() => {
-    dispatch(showInventory())
+    dispatch(getProducts())
+    dispatch(getAllCustomer())
+    dispatch(getAllsales())
   }, [dispatch])
 
-  console.log(inventory)
+  const totalSales = sales.reduce((total, sales) => total+Number(sales.paidAmount) , 0)
+  
   return (
     <div className='w-full flex flex-col gap-5'>
 
-      <FourBox />
+      <div className='w-full'>
+        <div>
+        <div className='px-5 flex justify-between items-center h-[10vh]'>
+
+          <div>
+            <h1 className='text-xl font-bold text-gray-800'>Hello {userName}👏</h1>
+            <p className='text-sm text-gray-500'>Here is Your activities</p>
+          </div>
+
+          <div className='flex justify-center items-center gap-2 relative'>
+            <button className='py-1 px-3 bg-white shadow  rounded-md '>{new Date().toDateString()}</button>
+            <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D]'>New Sales</button>
+          </div>
+
+        </div>
+        <div>
+
+          <div className='flex justify-center items-center gap-5 px-5'>
+
+            <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-gray-500 font-medium'>Total Sales</h1>
+                <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
+              </div>
+
+              <div>
+                <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{totalSales}</h1>
+
+                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
+              </div>
+            </div>
+            
+            <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-gray-500 font-medium'>Total Customer</h1>
+                <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
+              </div>
+
+              <div>
+                <h1 className='font-bold text-4xl'>{customers.length}</h1>
+
+                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
+              </div>
+            </div>
+
+            <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-gray-500 font-medium'>Total Customer</h1>
+                <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
+              </div>
+
+              <div>
+                <h1 className='font-bold text-4xl'>128</h1>
+
+                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
+              </div>
+            </div>
+
+            <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-gray-500 font-medium'>Total Customer</h1>
+                <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
+              </div>
+
+              <div>
+                <h1 className='font-bold text-4xl'>128</h1>
+
+                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
+              </div>
+            </div>
+            
+            
+          </div>
+        </div>
+      </div>
+    </div>
 
       <div className='w-full px-5 grid grid-cols-[69%_30%] gap-4'>
 
@@ -266,27 +354,29 @@ const Dashboard = () => {
           <div className='flex flex-col gap-2 p-3 overflow-y-auto scrollbar-none'>
 
             {
-              inventory.map((product) => (
-                <div className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
+              products
+                .filter((product) => product.quantity < 20)
+                .map((product) => (
+                  <div key={product.productName} className='bg-[#F4F8FF] rounded-lg p-3 border border-gray-200 shrink-0'>
 
-                  <div className='flex justify-between items-center'>
+                    <div className='flex justify-between items-center'>
 
-                    <h3 className='font-semibold text-gray-800'>
-                      {product.productName}
-                    </h3>
+                      <h3 className='font-semibold text-gray-800'>
+                        {product.productName}
+                      </h3>
 
-                    <span className={`px-2 py-1 text-xs font-medium rounded-md ${product.quantity>10 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
-                      Low Stock
-                    </span>
+                      <span className={`px-2 py-1 text-xs font-medium rounded-md ${product.quantity > 10 ? 'bg-orange-100 text-orange-700' : 'bg-red-100 text-red-700'}`}>
+                        Low Stock
+                      </span>
+
+                    </div>
+
+                    <p className='text-sm text-gray-500 mt-1'>
+                      {product.quantity} packets left
+                    </p>
 
                   </div>
-
-                  <p className='text-sm text-gray-500 mt-1'>
-                    {product.quantity} packets left
-                  </p>
-
-                </div>
-              ))
+                ))
             }
 
           </div>

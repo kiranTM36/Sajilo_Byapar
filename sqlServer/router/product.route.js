@@ -5,7 +5,7 @@ const auth = require('../middleware/authorization')
 
 router.post('/add' ,multer.single('image'), addProduct)
 
-router.get('/get' , getProduct )
+router.get('/' , getProduct )
 
 router.get('/get/:id' , getSingleProduct)
 

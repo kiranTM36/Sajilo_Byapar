@@ -1,29 +1,18 @@
 import  { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
-import { getProducts } from '../store/productSlice'
-import { getCategory } from '../store/categorySlice'
-
-// interface categoryData {
-//   id : number
-//   categoryName : string
-// }
+import { getAllCreditor } from '../store/creditorSlice'
 
 const Credit = () => {
 
   const dispatch = useDispatch<AppDispatch>()
+  const { creditors } = useSelector((state:RootState) => state.credit)
 
-  const { category } = useSelector((state : RootState )=> state.category)
-  // const { products , status } = useSelector((state : RootState) => state.product)
-
-  useEffect(() => {
-    // dispatch(getProducts())
-    dispatch(getCategory())
-  } , [dispatch])
+ useEffect(() => {
+  dispatch(getAllCreditor())
+ }, [dispatch])
   
-  console.log(category)
-
-  console.log(category , status)
+  console.log(creditors)
   return (
     <div >
       <div className='w-full mb-[2vh]'>
@@ -79,14 +68,25 @@ const Credit = () => {
               </thead>
 
               <tbody className='w-full text-sm'>
-                <tr className='text-center text-gray-500 hover:bg-gray-50 border border-gray-200'>
-                  <th className='px-5 py-4 font-medium w-[15%] text-gray-800'>Kiran Magar</th>
-                  <th className='px-5 py-4 font-medium text-gray-600'>9827364010</th>
-                  <th className='px-5 py-4 font-medium text-gray-600'>Rs. 900</th>
-                  <th className='px-5 py-4 font-medium text-gray-600'>Rs. 700</th>
-                  <th className='px-5 py-4 font-medium text-gray-600'>Rs. 200</th>
-                  <th className='px-5 py-4 font-medium text-gray-600'>Yesterday</th>
-                </tr>
+                {
+                  creditors.toReversed().map((creditor) => (
+                    <tr key={creditor.cId} className='text-center text-gray-500 hover:bg-gray-50 border border-gray-200'>
+                        <th className='px-5 py-4 font-medium w-[15%] text-gray-800'>{creditor.userName}</th>
+                        <th className='px-5 py-4 font-medium text-gray-600'>{creditor.salesId}</th>
+                        <th className='px-5 py-4 font-medium text-gray-600'>{Number(creditor.paidAmount) + Number(creditor.creditAmount)}</th>
+                        <th className='px-5 py-4 font-medium text-gray-600'>{creditor.paidAmount}</th>
+                        <th className='px-5 py-4 font-medium text-gray-600'>{creditor.creditAmount}</th>
+                        <th className='px-5 py-4 font-medium text-gray-600'>{new Date(creditor.dueDate).toLocaleDateString('ne-NP', {
+                          year : "numeric",
+                          month : "short",
+                          day : "2-digit",
+                          hour12 : true,
+                          hour : "2-digit",
+                          minute : "2-digit"
+                        })}</th>
+                      </tr>
+                  ))
+                }
               </tbody>
             </table>
           </div>

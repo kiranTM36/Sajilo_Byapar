@@ -1,10 +1,14 @@
+import { useSelector } from "react-redux"
 import { NavLink } from "react-router-dom"
+import type { RootState } from "../store/store"
 
 const SIdenav = () => {
+
+  const {user} = useSelector((state:RootState) => state.user)
   return (
     <div className="h-full bg-white shadow flex justify-start items-center py-2 flex-col gap-1">
 
-        <NavLink to='/' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-display"></i>DashBoard</NavLink> 
+          <NavLink to='/' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-display"></i>DashBoard</NavLink> 
         <NavLink to='/sales' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}>Sales</NavLink> 
         <NavLink to='/customers' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-users"></i>Customers</NavLink> 
         <NavLink to='/products' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-box"></i>Products</NavLink> 
@@ -12,6 +16,7 @@ const SIdenav = () => {
         <NavLink to='/credit' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-book-open"></i>Credit</NavLink> 
         <NavLink to='/report' className={({isActive}) => `SidenavButton ${isActive ? 'sidenavAvtive' : ''}`}><i className="fa-solid fa-chart-area"></i>Report</NavLink> 
 
+        
     </div>
   )
 }

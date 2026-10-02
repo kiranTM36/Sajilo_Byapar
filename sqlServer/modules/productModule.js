@@ -6,6 +6,7 @@ const createProductTable = () => {
             id INT PRIMARY KEY AUTO_INCREMENT,
             productName VARCHAR(50) NOT NULL ,
             price DECIMAL(12 ,2) NOT NULL ,
+            quantity INT NOT NULL ,
             description VARCHAR (1000) ,
             image VARCHAR (1000) NOT NULL ,
             categoryId INT NOT NULL,

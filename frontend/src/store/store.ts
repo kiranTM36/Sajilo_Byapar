@@ -4,7 +4,7 @@ import userSlice from './userSlice'
 import categorySlice from './categorySlice'
 import salesSlice from './saleSlice'
 import inventorySlice from './inventorySlice' 
-
+import creditSlice from './creditorSlice'
 
 export const store = configureStore({
     reducer : {
@@ -12,7 +12,8 @@ export const store = configureStore({
         sales : salesSlice,
         user : userSlice ,
         category : categorySlice,
-        inventory : inventorySlice
+        inventory : inventorySlice,
+        credit : creditSlice
     }
 }) 
 

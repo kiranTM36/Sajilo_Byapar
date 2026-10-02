@@ -83,7 +83,7 @@ const getAllUser = (req, res) => {
 const getSingleUser = (req, res) => {
     try {
         const { id } = req.params;
-        const sql = `SELECT * FROM customer WHERE id = ?`;
+        const sql = `SELECT * FROM user WHERE id = ?`;
 
         db.query(sql, [id], (err, result) => {
             if (err) {
@@ -224,6 +224,8 @@ const userLogin = (req, res) => {
 
             const user = result[0]
 
+            //(password  === user.password)
+
             const matchPass = bcrypt.compareSync(password , user.password)
 
             if (!matchPass) {
@@ -291,6 +293,14 @@ const updateuser = (req ,res) => {
                 result
             })
         })
+    } catch (error) {
+        
+    }
+}
+
+const logout = () => {
+    try {
+        
     } catch (error) {
         
     }

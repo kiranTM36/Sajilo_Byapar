@@ -6,7 +6,7 @@ const addProduct =  (req, res) => {
             productName,
             price,
             description,
-            categoryId
+            categoryId,
         } = req.body
 
         if (!req.file) {
@@ -53,15 +53,8 @@ const getProduct =  (req, res) => {
     try {
         const sql = `
             SELECT 
-    p.id,
-    p.productName,
-    p.price,
-    p.image,
-    p.description,
-    c.id AS categoryId,
-    c.categoryName
-FROM product p
-INNER JOIN category c
+            p.*,c.*
+FROM product p JOIN category c
 ON p.categoryId = c.id;
         `
         db.query(sql, (err, result) => {

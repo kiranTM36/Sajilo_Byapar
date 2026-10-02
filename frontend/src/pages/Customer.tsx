@@ -23,6 +23,9 @@ const Customer = () => {
     dispatch(getAllCustomer())
   }, [dispatch])
 
+  console.log(customers);
+  
+
   const searchCustomer = customers.filter((customer) => customer.userName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
 
   return (
@@ -100,11 +103,11 @@ const Customer = () => {
                 {
                   searchCustomer.reverse()?.map((customer) => (
                     <tr key={customer.id} className='w-full text-center text-gray-500 border border-gray-200 hover:bg-gray-50'>
-                      <td className='py-4 px-5 font-medium w-[15%]'><Link to={`user/${customer.id}`}>{customer.userName}</Link></td>
+                      <td className='py-4 px-5 font-medium w-[15%]'><Link to={`/customers/${customer.id}`}>{customer.userName}</Link></td>
                       <td className='py-4 px-5 font-medium'>{customer.phoneNo}</td>
                       <td className='py-4 px-5 font-medium'>Rs 20</td>
                       <td className='py-4 px-5 font-normal'>{customer.role}</td>
-                      <td className='py-4 px-5 font-medium'>{new Date(customer.createdAt).toLocaleDateString("ne-NP", {
+                      <td className='py-4 px-5 font-medium'>{new Date(customer.createdAt).toLocaleDateString("us-US", {
                         year: "numeric",
                         month: "short",
                         day: "2-digit"

@@ -2,15 +2,7 @@ const router = require('express').Router();
 
 const auth = require('../middleware/authorization');
 
-const {
-    createUser,
-    getAllUser,
-    getSingleUser,
-    deleteUser,
-    getAllCustomer,
-    userLogin
-} = require('../controller/userController');
-
+const { createUser, getAllUser, getSingleUser, deleteUser, getAllCustomer, userLogin } = require('../controller/userController');
 
 router.post('/signup', createUser);
 
@@ -23,6 +15,5 @@ router.post('/login', userLogin);
 router.get('/:id', getSingleUser);
 
 router.delete('/:id', auth('ADMIN'), deleteUser);
-
 
 module.exports = router;

@@ -24,6 +24,8 @@ const categoryRoute = require('./router/category.route')
 const productRoute = require('./router/product.route')
 const salesRoute = require('./router/sales.route')
 const inventoryRoute = require('./router/invetory.route')
+const salesDetailsRoute = require('./router/salesDetail.route')
+const creditRoute = require('./router/creditor.route')
 
 const app = express()
 
@@ -41,9 +43,11 @@ app.use('/uploads', express.static('uploads'))
 
 app.use('/user' , userRoute)
 app.use('/category' , categoryRoute)
-app.use('/product' , productRoute)
+app.use('/products' , productRoute)
 app.use('/sales' , salesRoute)
 app.use('/inventory' , inventoryRoute)
+app.use('/creditor' , creditRoute )
+app.use('/salesDetails', salesDetailsRoute)
 
 app.listen(8000, () => {
     console.log("Server Started")

@@ -53,7 +53,7 @@ const getProduct =  (req, res) => {
     try {
         const sql = `
             SELECT 
-            p.*,c.*
+            p.*,p.id as pId,c.*
 FROM product p JOIN category c
 ON p.categoryId = c.id;
         `

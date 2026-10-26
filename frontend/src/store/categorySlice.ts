@@ -2,9 +2,10 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { STATUSES } from '../status/STATUSES'
 import axios from 'axios'
 import config from '../config/config'
+import type { AppDispatch } from './store'
 
 interface categoryData {
-    id : Number ,
+    id : number ,
     categoryName : string
 }
 
@@ -35,7 +36,7 @@ export const { setCategory , setStatus } = categorySlice.actions
 export default categorySlice.reducer
 
 export function getCategory(){
-    return async function getCategoryThunk( dispatch : any ) {
+    return async function getCategoryThunk( dispatch : AppDispatch ) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -47,6 +48,8 @@ export function getCategory(){
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
+            console.error(error);
+            
         }
     }
 }

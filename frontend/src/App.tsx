@@ -10,8 +10,9 @@ import CustomerLogin from './auth/CustomerLogin'
 import SingleProduct from './pages/SingleProduct'
 import SingleCustomer from './pages/SingleCustomer'
 import Inventory from './pages/Inventory'
-import AdminRoute from './status/AdminRoute'
 import Report from './pages/Report'
+import AddProduct from './pages/AddProduct'
+import InventoryForm from './pages/InventoryForm'
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route index element={<><Dashboard /></>} />
           <Route path='sales' element={<Sales />} />
           <Route path='products' element={<Products />} />
+          <Route path='/inv' element={<InventoryForm />} />
           
           <Route path='customers'>
             <Route index element={<Customer />} />
@@ -34,6 +36,7 @@ const App = () => {
           <Route path='report' element={<Report />} />
         </Route>
 
+        <Route path='/product/add' element={<AddProduct />} />
         <Route path='/customer/edit' element={<CustomerEdit />} />
         <Route path='/login' element={<CustomerLogin />} />
         <Route path='product/:id' element={<SingleProduct />} />

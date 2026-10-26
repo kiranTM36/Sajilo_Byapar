@@ -10,29 +10,27 @@ import config from '../config/config'
 const Products = () => {
 
   const [search , setSearch] = useState('')
+  const [selectedCategory, setCategory] = useState('')
   const dispatch = useDispatch<AppDispatch>()
 
   const { category } = useSelector((state : RootState )=> state.category)
-
-
-  useEffect(() => {
-    dispatch(getCategory())
-  } , [dispatch])
-  
-  
-  console.log(category)
-
-  console.log(category , status)
-
   const { products } = useSelector((state:RootState) => state.product)
 
   useEffect(() => {
     dispatch(getProducts())
+    dispatch(getCategory())
   }, [dispatch])
 
-  const searchProduct = products.filter((product) => product.productName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+ const searchProduct = products.filter((product) =>
+ {
+  const matchProduct = product.productName.toLowerCase().includes(search.toLowerCase())
 
-  const handleFilter = products.filter((product) => product.categoryId)
+  const filterProduct = selectedCategory === "" || String(product.categoryId) === selectedCategory
+  return matchProduct && filterProduct
+ }
+);
+
+  //const handleFilter = products.filter((product) => product.categoryId)
   return (
     <div >
       <div className='w-full mb-[2vh]'>
@@ -46,7 +44,7 @@ const Products = () => {
 
             <div className='flex justify-center items-center gap-2 relative'>
               <button className='py-1 px-3 bg-white shadow  rounded-md '>Calender</button>
-              <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D]'>New Sales</button>
+              <Link to='/product/add'><button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D]'>Add Product</button></Link>
             </div>
 
           </div>
@@ -69,7 +67,7 @@ const Products = () => {
             <button className='absolute top-0 right-0 h-full w-[3vw] bg-[#00855D] text-white'><i className="fa-solid fa-magnifying-glass"></i></button>
           </div>
 
-          <select name="" id="" className='w-[15%] border border-gray-200 p-1'>
+          <select onChange={(e)=> setCategory(e.target.value) } name="" id="" className='w-[15%] border border-gray-200 p-1'>
             <option value="">Category</option>
             {
               category.map((item)=> (
@@ -94,13 +92,13 @@ const Products = () => {
 
               <tbody className='w-full text-sm'>
                 {
-                  searchProduct?.map((product) => (
-                    <tr className='text-center text-gray-500 bg-white border border-gray-200' key={product.id}>
+                  searchProduct?.map((product , index) => (
+                    <tr className='text-center text-gray-500 bg-white border border-gray-200 hover:bg-gray-50' key={index}>
                       <td className='px-5 py-2 font-medium w-[8%]'><div className='h-12.5 w-full'><img className='h-full w-full object-cover' src={`${config}uploads/${product.image}`} alt="" /></div></td>
-                      <td className='px-5 py-4 font-medium'><Link to={`/product/${product.id}`}>{product.productName}</Link></td>
+                      <td className='px-5 py-4 font-medium'><Link to={`/product/${product.pId}`}>{product.productName}</Link></td>
                       <td className='px-5 py-4 font-medium'>{product.categoryName}</td>
                       <td className='px-5 py-4 font-medium'>Rs {product.price}</td>
-                      <td className='px-5 py-4 font-medium'>{product.description}</td>
+                      <td className='px-5 py-4 font-medium'>{product.quantity}</td>
                       <td className='px-5 py-4 font-medium'>Action</td>
                   </tr>
                   ))

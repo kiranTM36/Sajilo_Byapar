@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import { STATUSES } from "../status/STATUSES"
 import axios from "axios"
 import config from "../config/config"
+import type { AppDispatch } from "./store"
 
 interface sales {
     id : number,
@@ -9,18 +10,21 @@ interface sales {
     userName : string ,
     paidAmount : number ,
     totalAmount : number
-    saleDate : Date
+    saleDate : Date,
+    productName : string
+    itemQty : number
+    price : number
 }
 
 interface salesState {
     sales : sales[],
-    sale : sales | null ,
+    sale : sales[] ,
     status : string
 }
 
 const initialState : salesState = {
     sales : [],
-    sale : null ,
+    sale : [] ,
     status : ""
 }
 
@@ -31,7 +35,7 @@ const salesSlice = createSlice({
         setsales(state , action : PayloadAction<sales[]>){
             state.sales = action.payload
         },
-        setsale(state , action : PayloadAction<sales>){
+        setsale(state , action : PayloadAction<sales[]>){
             state.sale = action.payload
         },
         setStatus(state , action : PayloadAction <string>){
@@ -44,7 +48,7 @@ export const { setsale , setsales , setStatus } = salesSlice.actions
 export default salesSlice.reducer
 
 export function getAllsales(){
-    return async function getAllsalesorThunk(dispatch : any){
+    return async function getAllsalesorThunk(dispatch : AppDispatch){
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -54,13 +58,14 @@ export function getAllsales(){
                 dispatch(setStatus(STATUSES.SUCCESS))
             }
         } catch (error) {
+            console.error(error);
             
         }
     }
 }
 
 export function getSinglesale(id: number){
-    return async function getSinglesaleThunk(dispatch : any){
+    return async function getSinglesaleThunk(dispatch : AppDispatch){
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -70,6 +75,7 @@ export function getSinglesale(id: number){
                 dispatch(setStatus(STATUSES.SUCCESS))
             }
         } catch (error) {
+            console.error(error);
             
         }
     }

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { type AppDispatch, type RootState } from '../store/store'
 import { getSingleUser } from '../store/userSlice'
 import { getSinglesale } from '../store/saleSlice'
@@ -10,7 +10,7 @@ const SingleCustomer = () => {
 
   const dispatch = useDispatch<AppDispatch>()
   const { user } = useSelector((state: RootState) => state.user)
-  const { sale } = useSelector((state:RootState) => state.sales)
+  const { sale } = useSelector((state: RootState) => state.sales)
 
   useEffect(() => {
     if (id) {
@@ -20,7 +20,21 @@ const SingleCustomer = () => {
 
   }, [dispatch, id])
 
-  console.log(user , sale)
+  const uniqueSales = sale.filter(
+  (item, index, self) =>
+    index === self.findIndex(s => s.saleId === item.saleId)
+)
+
+const totalAmount = uniqueSales.reduce(
+  (total, sale) => total + Number(sale.totalAmount),
+  0
+)
+
+const totalPaid = uniqueSales.reduce(
+  (total, sale) => total + Number(sale.paidAmount),
+  0
+)
+  console.log(user, sale)
   return (
     <div>
       <div className='w-full py-3'>
@@ -32,10 +46,10 @@ const SingleCustomer = () => {
 
                 <div className='flex justify-center items-center'>
                   <div className='h-[7vh] w-[7vh] bg-gray-300 mr-3 rounded-full flex items-center justify-center'>
-                      <h1 className='font-medium text-2xl'>
-                        {(user?.userName ? user.userName.split(' ').map(w => w[0]).join('') : '??').toUpperCase()}
-                      </h1>
-                    </div>
+                    <h1 className='font-medium text-2xl'>
+                      {(user?.userName ? user.userName.split(' ').map(w => w[0]).join('') : '??').toUpperCase()}
+                    </h1>
+                  </div>
                   <h1 className='text-3xl font-medium text-gray-800'>{user?.userName}</h1>
                 </div>
                 <div>
@@ -43,18 +57,13 @@ const SingleCustomer = () => {
                 </div>
               </div>
               <div className='flex justify-start'>
-                    <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-solid fa-phone mr-1"></i>{user?.phoneNo}</p>
-                    <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-regular fa-clock mr-1"></i>{user?.createdAt ? new Date(user.createdAt).toLocaleDateString("ne-Np", {
-                      year : "numeric",
-                      month : "long",
-                      day : "numeric"
-                    }) : ''}</p>
+                <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-solid fa-phone mr-1"></i>{user?.phoneNo}</p>
+                <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-regular fa-clock mr-1"></i>{user?.createdAt ? new Date(user.createdAt).toLocaleDateString("ne-Np", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric"
+                }) : ''}</p>
               </div>
-            </div>
-
-            <div className='flex justify-center items-center gap-2 relative'>
-              <button className='py-1 px-3 bg-white shadow  rounded-md '>{new Date().toDateString()}</button>
-              <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D]'>New Sales</button>
             </div>
 
           </div>
@@ -69,7 +78,7 @@ const SingleCustomer = () => {
                 </div>
 
                 <div>
-                  <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{sale?.totalAmount}</h1>
+                  <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{totalAmount}</h1>
 
                   <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
                 </div>
@@ -82,7 +91,7 @@ const SingleCustomer = () => {
                 </div>
 
                 <div>
-                  <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{sale?.paidAmount}</h1>
+                  <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{totalPaid}</h1>
 
                   <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
                 </div>
@@ -95,7 +104,7 @@ const SingleCustomer = () => {
                 </div>
 
                 <div>
-                  <h1 className='font-bold text-4xl text-red-700'><i className="fa-solid fa-indian-rupee-sign"></i>{Number(sale?.totalAmount) - Number(sale?.paidAmount)}</h1>
+                  <h1 className='font-bold text-4xl text-red-700'><i className="fa-solid fa-indian-rupee-sign"></i>{totalAmount - totalPaid}</h1>
 
                   <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
                 </div>
@@ -105,9 +114,57 @@ const SingleCustomer = () => {
             </div>
           </div>
         </div>
+
+        <div className='py-5 px-5'>
+          
+          <div>
+            { sale.length === 0 ? <h1>No Sales Made</h1> : (
+              <div className='w-full border border-gray-200 rounded-md bg-white shadow'>
+                <h1 className='p-2 text-2xl font-bold ml-10 text-gray-700'>Recent Sales</h1>
+              <table className='w-full text-sm'>
+              <thead className='text-gray-50 border-b border-gray-200 sticky top-0'>
+                <tr className='text-center text-gray-500 bg-[#EEF4FF]'>
+                  <th className='px-5 py-2 font-medium w-[20%]'>Date & Time</th>
+                  <th className='px-5 py-2 font-medium'>Product</th>
+                  <th className='px-5 py-2 font-medium'>SaleId</th>
+                  <th className='px-5 py-2 font-medium'>Quantity</th>
+                  <th className='px-5 py-2 font-medium'>Total</th>
+                  <th className='px-5 py-2 font-medium'>Action</th>
+                </tr>
+              </thead>
+
+              <tbody className='w-full text-sm'>
+                {
+                  sale?.map((sale) => (
+                    <tr className='text-center text-gray-500 bg-white border border-gray-200 hover:bg-gray-50' key={sale.id}>
+                      <td className='px-5 py-4 font-medium'>{new Date(sale.saleDate).toLocaleDateString("ne-Np", {
+                        year : "numeric",
+                        month : "short",
+                        day : "2-digit",
+                        hour12 : true,
+                        hour : "2-digit",
+                        minute: "2-digit",
+                        second : "2-digit"
+                      })}</td>
+                      <td className='px-5 py-4 font-medium'><Link to={`/product/${sale.id}`}>{sale.productName}</Link></td>
+                      <td className='px-5 py-4 font-medium'>{sale.saleId}</td>
+                      <td className='px-5 py-4 font-medium'>{sale.itemQty}</td>
+                      <td className='px-5 py-4 font-medium'><i className="fa-solid fa-indian-rupee-sign"></i> {sale.itemQty * sale.price}</td>
+                      <td className='px-5 py-4 font-medium'>Action</td>
+                  </tr>
+                  ))
+                }
+
+              </tbody>
+            </table>
+            </div>
+            )}
+          
+        </div>
+        </div>
       </div>
     </div>
-      )
+  )
 }
 
-      export default SingleCustomer
+export default SingleCustomer

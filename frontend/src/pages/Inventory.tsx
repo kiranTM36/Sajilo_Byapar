@@ -16,7 +16,7 @@ const Inventory = () => {
 
     console.log(inventory , status)
   return (
-    <div className='px-5'>
+    <div className='px-5 py-3'>
         <div className='h-[10vh] w-full border px-4 flex justify-between items-center border-gray-200 rounded-md bg-white mb-3'>
           <div className='w-[83%] border border-gray-200 h-[5vh] relative rounded-md overflow-hidden'>
             <input type="text" placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
@@ -37,29 +37,28 @@ const Inventory = () => {
             <table className='w-full text-sm'>
               <thead className='text-gray-50 border-b border-gray-200 sticky top-0'>
                 <tr className='text-center text-gray-500 bg-[#EEF4FF]'>
-                  <th className='px-5 py-2 font-medium w-[5%]'>Image</th>
+                  <th className='px-5 py-2 font-medium w-[10%]'>Batch No</th>
                   <th className='px-5 py-2 font-medium'>Product</th>
-                  <th className='px-5 py-2 font-medium'>Category</th>
                   <th className='px-5 py-2 font-medium'>Price</th>
                   <th className='px-5 py-2 font-medium'>Stock</th>
-                  <th className='px-5 py-2 font-medium'>Action</th>
+                  <th className='px-5 py-2 font-medium'>Purchase Date</th>
                 </tr>
               </thead>
 
               <tbody className='w-full text-sm'>
                 {
                   inventory?.map((product) => (
-                    <tr className='text-center text-gray-500 bg-white border border-gray-200' key={product.id}>
-                      <td className='px-5 py-4 font-medium'><Link to={`/product/${product.id}`}>{product.productName}</Link></td>
-                      <td className='px-5 py-4 font-medium'>{product.batchNo}</td>
+                    <tr className='text-center text-gray-500 bg-white border border-gray-200 hover:bg-gray-50' key={product.id}>
+                      <td className='px-5 py-4 font-medium'><Link to={`/product/${product.id}`}>{product.batchNo}</Link></td>
+                      <td className='px-5 py-4 font-medium'>{product.productName}</td>
                       <td className='px-5 py-4 font-medium'>Rs {product.purchasedPrice}</td>
+                      <td className='px-5 py-4 font-medium'>{product.quantity}</td>
+
                       <td className='px-5 py-4 font-medium'>{new Date(product.purchaseDate).toLocaleDateString("ne-Np" , {
                         year : "numeric",
                         month : "short",
                         day : "2-digit"
                       })}</td>
-                      
-                      <td className='px-5 py-4 font-medium'>Action</td>
                   </tr>
                   ))
                 }

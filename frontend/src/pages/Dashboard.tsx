@@ -1,24 +1,42 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
 import { useEffect } from 'react'
-import { showInventory } from '../store/inventorySlice'
 import { getAllCustomer } from '../store/userSlice';
 import { getAllsales } from '../store/saleSlice';
 import { getProducts } from '../store/productSlice';
 
-interface User {
-  userName: string;
+
+interface userData {
+    id : number
+    userName : string
+    phoneNo : string,
+    password : string
+    role: string
+    createdAt : Date
 }
 
 const Dashboard = () => {
 
   const dispatch = useDispatch<AppDispatch>()
-  const user: User | null = JSON.parse(localStorage.getItem('User') || 'null');
-  const userName = user?.userName || 'User';
 
   const { products } = useSelector((state: RootState) => state.product)
   const { customers } = useSelector((state:RootState) => state.user)
   const { sales } = useSelector((state:RootState) => state.sales)
+  const { user } = useSelector((state:RootState) => state.user)
+
+  console.log(user);
+  
+
+  const todayCustomers = customers.filter((customer: userData) => {
+  const createdDate = new Date(customer.createdAt)
+  const today = new Date()
+
+  return (
+    createdDate.getDate() === today.getDate() &&
+    createdDate.getMonth() === today.getMonth() &&
+    createdDate.getFullYear() === today.getFullYear()
+  )
+})
 
   useEffect(() => {
     dispatch(getProducts())
@@ -36,7 +54,7 @@ const Dashboard = () => {
         <div className='px-5 flex justify-between items-center h-[10vh]'>
 
           <div>
-            <h1 className='text-xl font-bold text-gray-800'>Hello {userName}👏</h1>
+            <h1 className='text-xl font-bold text-gray-800'>Hello {user?.userName ?? 'there'}👏</h1>
             <p className='text-sm text-gray-500'>Here is Your activities</p>
           </div>
 
@@ -72,7 +90,7 @@ const Dashboard = () => {
               <div>
                 <h1 className='font-bold text-4xl'>{customers.length}</h1>
 
-                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
+                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+{todayCustomers.length} customers</span> Registered based</div>
               </div>
             </div>
 

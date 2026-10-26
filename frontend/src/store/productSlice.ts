@@ -2,8 +2,10 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { STATUSES } from '../status/STATUSES'
 import config from '../config/config'
+import type { AppDispatch } from './store'
 
 interface productData {
+    pId : number
     id: number,
     productName : string,
     categoryId: number
@@ -22,9 +24,9 @@ interface productState {
 
 interface createProduct {
     productName : string
-    markedPrice: number,
+    markedPrice: string,
     categoryId: string,
-    image: string,
+    image: File | null,
     description: string
 }
 
@@ -54,7 +56,7 @@ export const { setProducts, setSingleProduct, setStatus } = productSlice.actions
 export default productSlice.reducer
 
 export function getProducts() {
-    return async function getProductThunk(dispatch: any) {
+    return async function getProductThunk(dispatch: AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
         try {
             const response = await axios.get(`${config}products`)
@@ -64,37 +66,57 @@ export function getProducts() {
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
+            console.log(error);
+            
         }
     }
 }
 
 export function getSingleProducts( id : number) {
-    return async function getSingleProductsThunk(dispatch: any) {
+    return async function getSingleProductsThunk(dispatch: AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
         try {
-            const response = await axios.get(`${config}product/get/${id}`)
+            const response = await axios.get(`${config}products/get/${id}`)
             if (response.status === 201 || response.status === 200) {
                 dispatch(setSingleProduct(response.data.product))
                 dispatch(setStatus(STATUSES.SUCCESS))
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
+            console.log(error);
+            
         }
     }
 }
 
-export function createProduct(data : createProduct){
-    return async function createProductThunk(dispatch:any) {
+export function createProduct(data: FormData) {
+    return async function createProductThunk(dispatch: AppDispatch) {
+        
+
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.post('' , data)
+
+            const response = await axios.post(
+                `${config}products/add`,
+                data
+            )
+
+            console.log(response);
             
-            if(response.status === 201 || response.status === 200){
+
+            if (response.status === 201 || response.status === 200) {
                 dispatch(setStatus(STATUSES.SUCCESS))
+                return true
             }
+
         } catch (error) {
+
             dispatch(setStatus(STATUSES.ERROR))
+            console.error(error)
+
         }
-    }
+
+        return false
+     }
 }

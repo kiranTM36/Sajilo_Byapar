@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { STATUSES } from '../status/STATUSES'
 import axios from 'axios'
 import config from '../config/config'
+import type { AppDispatch } from './store'
 
 interface creditData {
     cId : number
@@ -40,7 +41,7 @@ export const { setCreditor, setStatus } = creditSlice.actions
 export default creditSlice.reducer
 
 export function getAllCreditor() {
-    return async function getAllCreditorThunk(dispatch:any){
+    return async function getAllCreditorThunk(dispatch:AppDispatch){
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -52,6 +53,8 @@ export function getAllCreditor() {
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
+            console.error(error);
+            
         }
     }
 }

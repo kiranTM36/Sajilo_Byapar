@@ -14,10 +14,10 @@ const inventoryModule = require('./modules/inventoryModule')
 userModule()
 categoryModule()
 productModule()
+inventoryModule()
 salesModule()
 salesDetailsModule()
 creditModule()
-inventoryModule()
 
 const userRoute = require('./router/user.route')
 const categoryRoute = require('./router/category.route')
@@ -29,15 +29,16 @@ const creditRoute = require('./router/creditor.route')
 
 const app = express()
 
+app.use(cors({
+    origin : "http://localhost:5173",
+    credentials : true
+}))
+
 app.use(express.urlencoded({extended : true}))
 app.use(express.json())
 
 app.use(cookieParser())
 
-app.use(cors({
-    origin : "http://localhost:5173",
-    credentials : true
-}))
 
 app.use('/uploads', express.static('uploads'))
 
@@ -48,6 +49,10 @@ app.use('/sales' , salesRoute)
 app.use('/inventory' , inventoryRoute)
 app.use('/creditor' , creditRoute )
 app.use('/salesDetails', salesDetailsRoute)
+
+const whatsappRoute = require("./router/whatsApp.route")
+
+app.use("/whatsapp", whatsappRoute)
 
 app.listen(8000, () => {
     console.log("Server Started")

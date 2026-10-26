@@ -352,7 +352,21 @@ const getSingleSale = (req , res) => {
     try {
         const {id} = req.params
 
-        const sql = `SELECT s.* ,s.id as saleId,u.* FROM sales s join user u on s.customerId = u.id  where customerId = ?`
+        const sql = `SELECT 
+    s.*,
+    s.id AS saleId,
+    u.*,
+    si.quantity as itemQty,
+    p.*
+FROM sales s
+JOIN user u 
+    ON s.customerId = u.id
+JOIN sale_items si 
+    ON s.id = si.salesId
+JOIN product p 
+    ON si.productId = p.id
+WHERE s.customerId = ?`
+
 
         db.query(sql,[id], (err, result) => {
             if(err){
@@ -364,7 +378,7 @@ const getSingleSale = (req , res) => {
 
             res.status(200).json({
                 message : "Expenses List",
-                sale : result[0]
+                sale : result
             })
         })
     } catch (error) {

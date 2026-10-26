@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { STATUSES } from '../status/STATUSES'
 import axios from 'axios'
 import config from '../config/config'
+import type { AppDispatch } from './store'
 
 interface inventoryData {
     id : number
@@ -42,7 +43,7 @@ export const { setInventory , setStatus } = inventorySlice.actions
 export default inventorySlice.reducer
 
 export function showInventory(){
-    return async function showInventoryThunk(dispatch:any) {
+    return async function showInventoryThunk(dispatch:AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -53,6 +54,8 @@ export function showInventory(){
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
+            console.error(error);
+            
         }
     }
 }

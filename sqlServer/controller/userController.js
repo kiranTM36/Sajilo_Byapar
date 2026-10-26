@@ -5,7 +5,21 @@ const bcrypt = require('bcrypt')
 
 const createUser = (req, res) => {
     try {
-        const data = req.body;
+        const {userName , phoneNo, password } = req.body;
+
+        if(!userName || !phoneNo || !password){
+            return res.status(401).json({
+                message : "Please Enter All Data"
+            })
+        }
+
+        const regexPhone = /^9(7|8)[0-9]{8}$/
+        
+        if(!regexPhone.test(phoneNo)){
+            return res.status(401).json({
+                message : "Please Enter Valid Number "
+            })
+        }
         
         const sql = `
         INSERT INTO user
@@ -13,15 +27,10 @@ const createUser = (req, res) => {
         `;
 
         const genSalt = bcrypt.genSaltSync(10)
-        const hashPassword = bcrypt.hashSync(data.password , genSalt)
+        const hashPassword = bcrypt.hashSync(password , genSalt)
 
-        const values = [
-            data.userName,
-            data.phoneNo,
-            hashPassword,
-        ];
 
-        db.query(sql, values , (err, result) => {
+        db.query(sql, [userName , phoneNo , hashPassword] , (err, result) => {
             if (err) {
                 console.log("FAILED TO INSERT DATA", err);
                 return res.status(500).json({ 
@@ -298,12 +307,22 @@ const updateuser = (req ,res) => {
     }
 }
 
-const logout = () => {
+const logout = (req, res) => {
     try {
-        
-    } catch (error) {
-        
-    }
-}
+        res.clearCookie('token', {
+            httpOnly: true
+        });
 
-module.exports = { createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer , userLogin , updateuser};
+        return res.status(200).json({
+            success: true,
+            message: "Token removed successfully"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Logout failed"
+        });
+    }
+};
+
+module.exports = { createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer , userLogin , updateuser , logout};

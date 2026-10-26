@@ -17,7 +17,7 @@ const Customer = () => {
   }
 
 
-  const { customers, status } = useSelector((state: RootState) => state.user)
+  const { customers } = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
     dispatch(getAllCustomer())

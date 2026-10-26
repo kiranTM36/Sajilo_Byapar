@@ -2,6 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { STATUSES } from '../status/STATUSES'
 import axios from 'axios'
 import config from '../config/config'
+import type { AppDispatch } from './store'
 
 
 interface createCustomer {
@@ -43,7 +44,7 @@ const authSlice = createSlice({
         setusers (state , action :PayloadAction<userData[]>){
             state.users = action.payload
         },
-        setuser (state , action :PayloadAction<userData>){
+        setuser (state , action :PayloadAction<userData | null>){
             state.user = action.payload
         },
         setStatus (state , action : PayloadAction<string>){
@@ -62,7 +63,7 @@ export const { setusers , setuser , setStatus , setToken ,setCustomer } = authSl
 export default authSlice.reducer
 
 export function getusers(){
-    return async function getuserThunk(dispatch : any) {
+    return async function getuserThunk(dispatch : AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -72,30 +73,34 @@ export function getusers(){
                 dispatch(setStatus(STATUSES.SUCCESS))
             }
         } catch (error) {
+            console.log(error);
             dispatch(setStatus(STATUSES.ERROR))
         }
     }
 }
 
 export function signUp(data : createCustomer ){
-    return async function signUpThunk(dispatch:any) {
+    return async function signUpThunk(dispatch:AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.post(`${config}user/signup`,data)
+            const response = await axios.post(`${config}user/signup`,data, {
+                withCredentials : true
+            })
 
             if(response.status >= 200 || response.status < 300 ){
                 dispatch(setStatus(STATUSES.SUCCESS))
                 return true
             }
         } catch (error) {
+            console.log(error);
             dispatch(setStatus(STATUSES.ERROR))
         }
     }
 }
 
 export function login(data : createCustomer ){
-    return async function loginThunk(dispatch:any) {
+    return async function loginThunk(dispatch:AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -105,19 +110,20 @@ export function login(data : createCustomer ){
 
             if(response.status === 200 ){
                 dispatch(setToken(response.data.token))
-                dispatch(setuser(response.data.user))
-                dispatch(setStatus(STATUSES.SUCCESS))
 
+                dispatch(setuser(response.data.user))
+                
                 return true
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
+            console.log(error);
         }
     }
 }
 
 export function getAllCustomer() {
-    return async function getAllCustomerThunk(dispatch: any) {
+    return async function getAllCustomerThunk(dispatch: AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -136,7 +142,7 @@ export function getAllCustomer() {
 }
 
 export function deleteUser(id: number){
-    return async function deleteUserThunk(dispatch:any) {
+    return async function deleteUserThunk(dispatch:AppDispatch) {
 
         dispatch(setStatus(STATUSES.LOADING))
 
@@ -152,14 +158,14 @@ export function deleteUser(id: number){
                 return true
             }
         } catch (error) {
-            
+            console.log(error);
         }
         
     }
 }
 
 export function getSingleUser(id : number){
-    return async function getSingleUserThunk(dispatch : any){
+    return async function getSingleUserThunk(dispatch : AppDispatch){
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
@@ -171,6 +177,24 @@ export function getSingleUser(id : number){
             }
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
+            console.log(error);
         }
+    }
+}
+
+export function logOutAction(){
+    return async function logOutThunk() {
+       try {
+      await axios.post(
+        `${config}user/logout`,
+        {},
+        { withCredentials: true }
+      );
+        alert('logout Successfully')
+        localStorage.clear()
+    } catch (error) {
+      console.error(error);
+      
+    }
     }
 }

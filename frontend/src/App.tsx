@@ -1,4 +1,4 @@
-import { BrowserRouter , Routes , Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Home'
 import Dashboard from './pages/Dashboard'
 import Sales from './pages/Sales'
@@ -13,38 +13,46 @@ import Inventory from './pages/Inventory'
 import Report from './pages/Report'
 import AddProduct from './pages/AddProduct'
 import InventoryForm from './pages/InventoryForm'
+import PrivateRoute from './utils/PrivateRoute '
+import { useSelector } from 'react-redux'
+import type { RootState } from './store/store'
+import Profile from './pages/Profile'
 
 const App = () => {
+
+  const { user } = useSelector((state: RootState) => state.user)
+
+  const isAuth = !!user
   return (
     <BrowserRouter>
+    <Routes>
+        <Route path="/login" element={<CustomerLogin />} />
 
-      <Routes>
+        <Route element={<PrivateRoute isAuthenticated={isAuth} role={user?.role} />}>
+            <Route path="/" element={<Home />}>
+                <Route index element={<Dashboard />} />
+                <Route path="sales" element={<Sales />} />
+                <Route path="products" element={<Products />} />
+                <Route path="inv" element={<InventoryForm />} />
+                <Route path="profile" element={<Profile />} />
 
-        <Route path='/' element={<Home />}>
-          <Route index element={<><Dashboard /></>} />
-          <Route path='sales' element={<Sales />} />
-          <Route path='products' element={<Products />} />
-          <Route path='/inv' element={<InventoryForm />} />
-          
-          <Route path='customers'>
-            <Route index element={<Customer />} />
-            <Route path=':id' element={<SingleCustomer />} />
-          </Route>
+                <Route path="customers">
+                    <Route index element={<Customer />} />
+                    <Route path=":id" element={<SingleCustomer />} />
+                </Route>
 
-          <Route path='credit' element={<Credit />} />
-          <Route path='inventory' element={<Inventory />} />
-          <Route path='report' element={<Report />} />
+                <Route path="credit" element={<Credit />} />
+                <Route path="inventory" element={<Inventory />} />
+                <Route path="report" element={<Report />} />
+
+                <Route path="product/:id" element={<SingleProduct />} />
+            </Route>
+
+            <Route path="/product/add" element={<AddProduct />} />
+            <Route path="/customer/edit" element={<CustomerEdit />} />
         </Route>
-
-        <Route path='/product/add' element={<AddProduct />} />
-        <Route path='/customer/edit' element={<CustomerEdit />} />
-        <Route path='/login' element={<CustomerLogin />} />
-        <Route path='product/:id' element={<SingleProduct />} />
-        
-
-      </Routes>
-
-    </BrowserRouter>
+    </Routes>
+</BrowserRouter>
   )
 }
 

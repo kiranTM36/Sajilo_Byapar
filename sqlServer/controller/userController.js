@@ -159,6 +159,7 @@ const deleteUser = (req, res) => {
         });
     }
 };
+
 const getAllCustomer = (req, res) => {
     try {
         const sql = `
@@ -250,7 +251,7 @@ const userLogin = (req, res) => {
                 }
             )
 
-            res.cookie("token", token, {
+            res.cookie("TokenByapar", token, {
                     httpOnly: true,
                     secure: false,
                     maxAge: 30 * 24 * 60 * 60 * 1000
@@ -309,7 +310,7 @@ const updateuser = (req ,res) => {
 
 const logout = (req, res) => {
     try {
-        res.clearCookie('token', {
+        res.clearCookie('TokenByapar', {
             httpOnly: true
         });
 
@@ -325,4 +326,40 @@ const logout = (req, res) => {
     }
 };
 
-module.exports = { createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer , userLogin , updateuser , logout};
+const getProfile = (req ,res) => {
+    try {
+        const sql = `SELECT 
+    s.*,
+    s.id AS saleId,
+    u.*,
+    si.quantity as itemQty,
+    p.*
+FROM sales s
+JOIN user u 
+    ON s.customerId = u.id
+JOIN sale_items si 
+    ON s.id = si.salesId
+JOIN product p 
+    ON si.productId = p.id
+WHERE s.customerId = ?`
+
+        db.query(sql ,[req.user.id] , (err , result) => {
+            if(err){
+                return res.status(500).json({
+                    success : false ,
+                    message : "Failed to update"
+                })
+            }
+
+            return res.status(200).json({
+                message : "Your Profile",
+                success : true,
+                data : result
+            })
+        })
+    } catch (error) {
+        
+    }
+}
+
+module.exports = { getProfile,createUser, getAllUser, getSingleUser ,deleteUser , getAllCustomer , userLogin , updateuser , logout};

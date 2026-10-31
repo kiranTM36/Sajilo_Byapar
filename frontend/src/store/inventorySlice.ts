@@ -21,6 +21,15 @@ interface inventoryState {
     status : string
 }
 
+interface data {
+    batchNo : string
+    items : {
+        productId :  number,
+        quantity : number,
+        purchasedPrice : number
+    }[]
+}
+
 const initialState: inventoryState = {
     inventory : [],
     status : ''
@@ -58,4 +67,27 @@ export function showInventory(){
             
         }
     }
+}
+
+export function addInventory(data: data) {
+  return async function addInventoryThunk(dispatch: AppDispatch) {
+    dispatch(setStatus(STATUSES.LOADING));
+
+    try {
+      const response = await axios.post(
+        `${config}inventory/add`,
+        data,
+        { withCredentials: true }
+      );
+
+      if (response.status >= 200 && response.status < 300) {
+        dispatch(setStatus(STATUSES.SUCCESS));
+        alert("Items added to inventory");
+      }
+    } catch (error) {
+      dispatch(setStatus(STATUSES.ERROR));
+      console.error("Failed to add inventory:", error);
+      alert("Failed to add inventory");
+    }
+  };
 }

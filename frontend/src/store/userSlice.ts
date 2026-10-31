@@ -28,13 +28,12 @@ interface userState {
     customers : userData[]
 }
 
-const initialState : userState = {
-    users : [] ,
-    user : null ,
-    status : '' ,
-    token : '',
-    customers : [],
-
+const initialState: userState = {
+    users: [],
+    user: JSON.parse(localStorage.getItem('userByapar') || 'null'),
+    status: '',
+    token: localStorage.getItem('token') || '',
+    customers: [],
 }
 
 const authSlice = createSlice({
@@ -99,26 +98,37 @@ export function signUp(data : createCustomer ){
     }
 }
 
-export function login(data : createCustomer ){
-    return async function loginThunk(dispatch:AppDispatch) {
+export function login(data: createCustomer) {
+    return async function loginThunk(dispatch: AppDispatch) {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.post(`${config}user/login`,data , {
-                withCredentials : true
-            })
+            const response = await axios.post(
+                `${config}user/login`,
+                data,
+                { withCredentials: true }
+            )
 
-            if(response.status === 200 ){
-                dispatch(setToken(response.data.token))
+            if (response.status === 200) {
+                const user = response.data.user
+                const token = response.data.token
 
-                dispatch(setuser(response.data.user))
-                
+                localStorage.setItem('userByapar', JSON.stringify(user))
+                localStorage.setItem('token', token)
+
+                dispatch(setuser(user))
+                dispatch(setToken(token))
+                dispatch(setStatus(STATUSES.SUCCESS))
+
                 return true
             }
         } catch (error) {
+            console.error(error)
             dispatch(setStatus(STATUSES.ERROR))
-            console.log(error);
+            return false
         }
+
+        return false
     }
 }
 
@@ -127,7 +137,9 @@ export function getAllCustomer() {
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.get(`${config}user/all/customer`)
+            const response = await axios.get(`${config}user/all/customer` , {
+                withCredentials : true
+            })
 
             if (response.status === 200 || response.status=== 201) {
                 dispatch(setCustomer(response.data.customers))
@@ -182,19 +194,23 @@ export function getSingleUser(id : number){
     }
 }
 
-export function logOutAction(){
-    return async function logOutThunk() {
-       try {
-      await axios.post(
-        `${config}user/logout`,
-        {},
-        { withCredentials: true }
-      );
-        alert('logout Successfully')
-        localStorage.clear()
-    } catch (error) {
-      console.error(error);
-      
-    }
+export function logOutAction() {
+    return async function logOutThunk(dispatch: AppDispatch) {
+        try {
+            await axios.post(
+                `${config}user/logout`,
+                {},
+                { withCredentials: true }
+            )
+
+            localStorage.removeItem('userByapar')
+            localStorage.removeItem('token')
+
+            dispatch(setuser(null))
+            dispatch(setToken(''))
+            dispatch(setStatus(STATUSES.SUCCESS))
+        } catch (error) {
+            console.error(error)
+        }
     }
 }

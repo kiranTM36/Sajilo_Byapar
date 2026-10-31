@@ -1,52 +1,66 @@
-const db = require('../db')
-const jwt = require('jsonwebtoken')
+const db = require("../db");
+const jwt = require("jsonwebtoken");
 
-const authorize = (role) => {
-    return async(req, res, next) => {
-        try {
-            const token = req.cookies.token
+const authorize = (req, res, next) => {
+    const token = req.cookies?.TokenByapar;
 
-            if(!token){
-                return res.status(401).json({
-                    message : "Please Login"
-                })
+    if (!token) {
+        return res.status(401).json({
+            success: false,
+            message: "Please login",
+        });
+    }
+
+    try {
+        const decoded = jwt.verify(token, 'sajiloEncrypt');
+
+        const sql = "SELECT * FROM user WHERE id = ?";
+
+        db.query(sql, [decoded.id], (err, results) => {
+            if (err) {
+                return res.status(500).json({
+                    success: false,
+                    message: "Internal server error",
+                });
             }
 
-            const decoded = await jwt.verify(token , "sajiloEncrypt")
+            if (results.length === 0) {
+                return res.status(401).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
 
-            const sql = `SELECT userName , phoneNo , role FROM user WHERE phoneNo  = ?`
+            req.user = results[0];
 
-            db.query(sql , [decoded.phoneNo] , (err, result) => {
-                if (err) {
-                    console.log(err)
-                    return res.status(500).json({
-                        message: "Server Error"
-                    })
-                }
-
-                if (result.length === 0) {
-                    return res.status(401).json({
-                        message: "User Not Found"
-                    })
-                }
-
-                if(result[0].role !== role ){
-                    return res.json({
-                        message : "Access Denied"
-                    })
-                }
-                req.user = result[0]
-
-                next()
-            })
-        } catch (error) {
-            console.log(error)
-
-            return res.status(401).json({
-                message: "Invalid or Expired Token"
-            })
-        }
+            next();
+        });
+    } catch (error) {
+        return res.status(401).json({
+            success: false,
+            message: "Invalid or expired token",
+        });
     }
-}
+};
 
-module.exports = authorize
+const authenticate = (role) => {
+    return (req, res, next) => {
+        if (!req.user) {
+            return res.status(401).json({
+                success: false,
+                message: "Please login",
+            });
+        }
+
+        if (req.user.role !== role) {
+            return res.status(403).json({
+                success: false,
+                message: "Access denied",
+            });
+        }
+
+        next();
+    };
+};
+
+module.exports = { authorize, authenticate };

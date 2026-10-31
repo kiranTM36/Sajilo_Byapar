@@ -5,6 +5,7 @@ import config from "../config/config"
 import type { AppDispatch } from "./store"
 
 interface sales {
+    productId: number
     id : number,
     saleId : number
     userName : string ,
@@ -80,3 +81,21 @@ export function getSinglesale(id: number){
         }
     }
 }
+
+export function getProfile(){
+    return async function getProfileTHunk(dispatch:AppDispatch) {
+        dispatch(setStatus(STATUSES.LOADING))
+
+        try {
+            const response =await axios.get(`${config}user/profile` , {
+                withCredentials : true
+            })
+
+            dispatch(setsales(response.data.data))
+            
+        } catch (error) {
+            console.error(error);
+            
+        }
+    }
+} 

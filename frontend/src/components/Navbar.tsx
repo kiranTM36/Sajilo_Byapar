@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux"
 import { type AppDispatch } from "../store/store"
 import { logOutAction } from "../store/userSlice"
+import { Link } from "react-router-dom"
 
 const Navbar = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -18,12 +19,7 @@ const Navbar = () => {
             </div>
 
             <button onClick={handleLogout}>Logout</button>
-            <div className='w-[5vw]'>
-                {
-                    !localStorage.getItem('token') ? (<button>Login</button>):
-                <button>Logout</button>
-                }
-            </div>
+            <Link to='/login'><button>Login</button></Link>
         </div>
     )
 }

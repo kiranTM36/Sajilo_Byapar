@@ -1,20 +1,22 @@
 const router = require('express').Router();
 
-const auth = require('../middleware/authorization');
+const { authorize , authenticate} = require('../middleware/authorization')
 
-const { createUser, getAllUser, getSingleUser, deleteUser, getAllCustomer, userLogin, logout } = require('../controller/userController');
+const { createUser, getAllUser, getSingleUser, deleteUser, getAllCustomer, userLogin, logout, getProfile } = require('../controller/userController');
 
-router.post('/signup' ,  auth('ADMIN'),createUser);
+router.post('/signup' ,  authorize , authenticate('ADMIN'),createUser);
+
+router.get('/profile' , authorize , getProfile)
 
 router.get('/all', getAllUser);
 
-router.get('/all/customer', getAllCustomer);
+router.get('/all/customer',authorize , authenticate('ADMIN'), getAllCustomer);
 
 router.post('/login', userLogin);
 
-router.get('/:id', getSingleUser);
+router.get('/:id',authorize , authenticate('ADMIN'), getSingleUser);
 
-router.delete('/:id', auth('ADMIN'), deleteUser);
+router.delete('/:id', authorize , authenticate('ADMIN'), deleteUser);
 
 router.post('/logout' , logout)
 

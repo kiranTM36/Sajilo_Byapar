@@ -21,9 +21,8 @@ const SingleCustomer = () => {
   }, [dispatch, id])
 
   const uniqueSales = sale.filter(
-  (item, index, self) =>
-    index === self.findIndex(s => s.saleId === item.saleId)
-)
+  (item, index) => sale.findIndex(s => s.saleId === item.saleId) === index
+);
 
 const totalAmount = uniqueSales.reduce(
   (total, sale) => total + Number(sale.totalAmount),

@@ -9,7 +9,7 @@ const SingleCustomer = () => {
   const { id } = useParams()
 
   const dispatch = useDispatch<AppDispatch>()
-  const { user } = useSelector((state: RootState) => state.user)
+  const { singleUser } = useSelector((state: RootState) => state.user)
   const { sale } = useSelector((state: RootState) => state.sales)
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const totalPaid = uniqueSales.reduce(
   (total, sale) => total + Number(sale.paidAmount),
   0
 )
-  console.log(user, sale)
+  console.log(singleUser, sale)
   return (
     <div>
       <div className='w-full py-3'>
@@ -46,18 +46,18 @@ const totalPaid = uniqueSales.reduce(
                 <div className='flex justify-center items-center'>
                   <div className='h-[7vh] w-[7vh] bg-gray-300 mr-3 rounded-full flex items-center justify-center'>
                     <h1 className='font-medium text-2xl'>
-                      {(user?.userName ? user.userName.split(' ').map(w => w[0]).join('') : '??').toUpperCase()}
+                      {(singleUser?.userName ? singleUser.userName.split(' ').map(w => w[0]).join('') : '??').toUpperCase()}
                     </h1>
                   </div>
-                  <h1 className='text-3xl font-medium text-gray-800'>{user?.userName}</h1>
+                  <h1 className='text-3xl font-medium text-gray-800'>{singleUser?.userName}</h1>
                 </div>
                 <div>
                   <span className='bg-orange-50 px-2 py-1 font-medium text-orange-600 border border-orange-200 text-sm rounded-2xl'>Active-Khata</span>
                 </div>
               </div>
               <div className='flex justify-start'>
-                <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-solid fa-phone mr-1"></i>{user?.phoneNo}</p>
-                <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-regular fa-clock mr-1"></i>{user?.createdAt ? new Date(user.createdAt).toLocaleDateString("ne-Np", {
+                <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-solid fa-phone mr-1"></i>{singleUser?.phoneNo}</p>
+                <p className='text-sm text-gray-500 ml-12 mt-2'><i className="fa-regular fa-clock mr-1"></i>{singleUser?.createdAt ? new Date(singleUser.createdAt).toLocaleDateString("ne-Np", {
                   year: "numeric",
                   month: "long",
                   day: "numeric"
@@ -134,8 +134,8 @@ const totalPaid = uniqueSales.reduce(
 
               <tbody className='w-full text-sm'>
                 {
-                  sale?.map((sale) => (
-                    <tr className='text-center text-gray-500 bg-white border border-gray-200 hover:bg-gray-50' key={sale.id}>
+                  sale?.map((sale , index) => (
+                    <tr className='text-center text-gray-500 bg-white border border-gray-200 hover:bg-gray-50' key={index}>
                       <td className='px-5 py-4 font-medium'>{new Date(sale.saleDate).toLocaleDateString("ne-Np", {
                         year : "numeric",
                         month : "short",

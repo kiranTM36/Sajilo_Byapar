@@ -26,10 +26,12 @@ interface userState {
     status : string
     token : string
     customers : userData[]
+    singleUser : userData | null
 }
 
 const initialState: userState = {
     users: [],
+    singleUser : null,
     user: JSON.parse(localStorage.getItem('userByapar') || 'null'),
     status: '',
     token: localStorage.getItem('token') || '',
@@ -42,6 +44,9 @@ const authSlice = createSlice({
     reducers : {
         setusers (state , action :PayloadAction<userData[]>){
             state.users = action.payload
+        },
+        setSingleUser (state , action :PayloadAction<userData>){
+            state.singleUser = action.payload
         },
         setuser (state , action :PayloadAction<userData | null>){
             state.user = action.payload
@@ -58,7 +63,7 @@ const authSlice = createSlice({
     }
 })
 
-export const { setusers , setuser , setStatus , setToken ,setCustomer } = authSlice.actions
+export const { setusers , setSingleUser , setuser , setStatus , setToken ,setCustomer } = authSlice.actions
 export default authSlice.reducer
 
 export function getusers(){
@@ -176,20 +181,27 @@ export function deleteUser(id: number){
     }
 }
 
-export function getSingleUser(id : number){
-    return async function getSingleUserThunk(dispatch : AppDispatch){
+export function getSingleUser(id: number) {
+    return async function getSingleUserThunk(dispatch: AppDispatch) {
+
         dispatch(setStatus(STATUSES.LOADING))
 
         try {
-            const response = await axios.get(`${config}user/${id}`)
+            const response = await axios.get(`${config}user/${id}` , {
+                withCredentials : true
+            })
 
-            if(response.status >= 200 || response.status < 300){
-                dispatch(setuser(response.data.user))
+            console.log(response.data.user);
+            
+
+            if (response.status >= 200 && response.status < 300) {
+                dispatch(setSingleUser(response.data.user))
                 dispatch(setStatus(STATUSES.SUCCESS))
             }
+
         } catch (error) {
             dispatch(setStatus(STATUSES.ERROR))
-            console.log(error);
+            console.log(error)
         }
     }
 }

@@ -4,6 +4,7 @@ import { type AppDispatch, type RootState } from '../store/store'
 import { deleteUser, getAllCustomer } from '../store/userSlice'
 import { Link } from 'react-router-dom'
 import AddCustomer from '../auth/AddCustomer'
+import { X } from 'lucide-react'
 
 const Customer = () => {
 
@@ -29,49 +30,7 @@ const Customer = () => {
   const searchCustomer = customers.filter((customer) => customer.userName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
 
   return (
-    <div >
-      <div className='w-full mb-[2vh]'>
-        <div>
-          <div className='px-5 flex justify-between items-center h-[10vh]'>
-
-            <div>
-              <h1 className='text-xl font-bold text-gray-800'>Good Morining</h1>
-              <p className='text-sm text-gray-500'>Here is Your activities</p>
-            </div>
-
-            <div className='flex justify-center items-center gap-2 relative'>
-              <button className='py-1 px-3 bg-white shadow  rounded-md '>Calender</button>
-              <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D] flex gap-1 cursor-pointer justify-center items-center hover:scale-105 duration-200'
-                onClick={() => setShowForm(true)}
-              ><i className="fa-solid fa-plus text-md"></i>Add Customer</button>
-            </div>
-
-            {
-              showForm && (
-                <div className='h-screen fixed left-0 top-0 z-10 w-screen flex justify-center items-center backdrop-blur-2xl'>
-                  <div className='relative'>
-                    <button className='absolute top-[14vh] right-[35vw] h-[3vh] w-[3vh] text-center text-white bg-red-600 rounded-full text-sm hover:scale-105 cursor-pointer'
-                      onClick={() => setShowForm(false)}
-                    ><i className="fa-solid fa-x"></i></button>
-                    <AddCustomer />
-                  </div>
-                </div>
-              )
-            }
-
-          </div>
-          <div>
-
-            <div className='flex justify-center items-center gap-5 px-5'>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div className='mt-3'>
       <div className='px-5 pb-4'>
         <div className='h-[10vh] w-full border px-4 flex justify-between items-center border-gray-200 rounded-md bg-white mb-3'>
           <div className='w-[83%] border border-gray-200 h-[5vh] relative rounded-md overflow-hidden'>
@@ -79,11 +38,20 @@ const Customer = () => {
             <button className='absolute top-0 right-0 h-full w-[3vw] bg-[#00855D] text-white'><i className="fa-solid fa-magnifying-glass"></i></button>
           </div>
 
-          <select name="" id="" className='w-[15%] border border-gray-200 p-1'>
-            <option value="">Category</option>
-            <option value="">Credit</option>
-            <option value="">Paid</option>
-          </select>
+          <div onClick={()=>setShowForm(true)} className='w-[15%] border border-gray-200 p-1 bg-[#00855D] text-white text-center rounded-md hover:scale-105 duration-150 ease-in cursor-pointer'>
+            Add Customer
+          </div>
+
+          {
+            showForm && (
+              <div className='fixed inset-0 h-screen w-screen bg-black/50 flex justify-center items-center z-50'>
+                <div className='p-6 rounded-md shadow-lg relative'>
+                  <button onClick={()=>setShowForm(false)} className='absolute bg-red-700 text-white rounded-full text-center top-[18vh] left-[65vw] hover:scale-105 duration-100 cursor-pointer'><X className='stroke-3'/></button>
+                  <AddCustomer />
+                </div>
+              </div>
+            )
+          }
         </div>
         <div className='h-[78vh] w-full border border-gray-200 rounded-md  overflow-x-hidden overflow-y-auto'>
           <div className=''>
@@ -101,8 +69,8 @@ const Customer = () => {
 
               <tbody className='w-full text-sm overflow-x-hiddden bg-white overflow-y-auto'>
                 {
-                  searchCustomer.reverse()?.map((customer) => (
-                    <tr key={customer.id} className='w-full text-center text-gray-500 border border-gray-200 hover:bg-gray-50'>
+                  searchCustomer.reverse()?.map((customer , index) => (
+                    <tr key={index} className='w-full text-center text-gray-500 border border-gray-200 hover:bg-gray-50'>
                       <td className='py-4 px-5 font-medium w-[15%]'><Link to={`/customers/${customer.id}`}>{customer.userName}</Link></td>
                       <td className='py-4 px-5 font-medium'>{customer.phoneNo}</td>
                       <td className='py-4 px-5 font-medium'>Rs 20</td>

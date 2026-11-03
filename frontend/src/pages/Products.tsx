@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
 import { getProducts } from '../store/productSlice'
@@ -9,38 +9,32 @@ import config from '../config/config'
 
 const Products = () => {
 
-  const [search , setSearch] = useState('')
+  const [search, setSearch] = useState('')
   const [selectedCategory, setCategory] = useState('')
   const dispatch = useDispatch<AppDispatch>()
 
-  const { category } = useSelector((state : RootState )=> state.category)
-  const { products } = useSelector((state:RootState) => state.product)
+  const { category } = useSelector((state: RootState) => state.category)
+  const { products } = useSelector((state: RootState) => state.product)
+
 
   useEffect(() => {
     dispatch(getProducts())
     dispatch(getCategory())
   }, [dispatch])
 
- const searchProduct = products.filter((product) =>
- {
-  const matchProduct = product.productName.toLowerCase().includes(search.toLowerCase())
+  const searchProduct = products.filter((product) => {
+    const matchProduct = product.productName.toLowerCase().includes(search.toLowerCase())
 
-  const filterProduct = selectedCategory === "" || String(product.categoryId) === selectedCategory
-  return matchProduct && filterProduct
- }
-);
+    const filterProduct = selectedCategory === "" || String(product.categoryId) === selectedCategory
+    return matchProduct && filterProduct
+  }
+  );
 
-  //const handleFilter = products.filter((product) => product.categoryId)
   return (
     <div >
       <div className='w-full mb-[2vh]'>
         <div>
-          <div className='px-5 flex justify-between items-center h-[10vh]'>
-
-            <div>
-              <h1 className='text-xl font-bold text-gray-800'>Good Morining</h1>
-              <p className='text-sm text-gray-500'>Here is Your activities</p>
-            </div>
+          <div className='px-5 flex justify-end items-center h-[10vh]'>
 
             <div className='flex justify-center items-center gap-2 relative'>
               <button className='py-1 px-3 bg-white shadow  rounded-md '>Calender</button>
@@ -50,12 +44,7 @@ const Products = () => {
           </div>
           <div>
 
-            <div className='flex justify-center items-center gap-5 px-5'>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-              <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl'></div>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -63,14 +52,14 @@ const Products = () => {
       <div className='px-5'>
         <div className='h-[10vh] w-full border px-4 flex justify-between items-center border-gray-200 rounded-md bg-white mb-3'>
           <div className='w-[83%] border border-gray-200 h-[5vh] relative rounded-md overflow-hidden'>
-            <input type="text" onChange={(e)=>(setSearch(e.target.value))} value={search} placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
+            <input type="text" onChange={(e) => (setSearch(e.target.value))} value={search} placeholder='Search customer Name....' className='pl-2 pr-[4vw] outline-none bg-[#EEF4FF] w-full h-full' />
             <button className='absolute top-0 right-0 h-full w-[3vw] bg-[#00855D] text-white'><i className="fa-solid fa-magnifying-glass"></i></button>
           </div>
 
-          <select onChange={(e)=> setCategory(e.target.value) } name="" id="" className='w-[15%] border border-gray-200 p-1'>
+          <select onChange={(e) => setCategory(e.target.value)} name="" id="" className='w-[15%] border border-gray-200 p-1'>
             <option value="">Category</option>
             {
-              category.map((item)=> (
+              category.map((item) => (
                 <option value={`${item.id}`} key={`${item.id}`}>{item.categoryName}</option>
               ))
             }
@@ -92,7 +81,7 @@ const Products = () => {
 
               <tbody className='w-full text-sm'>
                 {
-                  searchProduct?.map((product , index) => (
+                  searchProduct?.map((product, index) => (
                     <tr className='text-center text-gray-500 bg-white border border-gray-200 hover:bg-gray-50' key={index}>
                       <td className='px-5 py-2 font-medium w-[8%]'><div className='h-12.5 w-full'><img className='h-full w-full object-cover' src={`${config}uploads/${product.image}`} alt="" /></div></td>
                       <td className='px-5 py-4 font-medium'><Link to={`/product/${product.pId}`}>{product.productName}</Link></td>
@@ -100,7 +89,7 @@ const Products = () => {
                       <td className='px-5 py-4 font-medium'>Rs {product.price}</td>
                       <td className='px-5 py-4 font-medium'>{product.quantity}</td>
                       <td className='px-5 py-4 font-medium'>Action</td>
-                  </tr>
+                    </tr>
                   ))
                 }
 

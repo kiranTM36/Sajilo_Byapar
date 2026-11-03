@@ -6,15 +6,6 @@ import { getAllsales } from '../store/saleSlice';
 import { getProducts } from '../store/productSlice';
 
 
-interface userData {
-    id : number
-    userName : string
-    phoneNo : string,
-    password : string
-    role: string
-    createdAt : Date
-}
-
 const Dashboard = () => {
 
   const dispatch = useDispatch<AppDispatch>()
@@ -27,17 +18,6 @@ const Dashboard = () => {
   console.log(user);
   
 
-  const todayCustomers = customers.filter((customer: userData) => {
-  const createdDate = new Date(customer.createdAt)
-  const today = new Date()
-
-  return (
-    createdDate.getDate() === today.getDate() &&
-    createdDate.getMonth() === today.getMonth() &&
-    createdDate.getFullYear() === today.getFullYear()
-  )
-})
-
   useEffect(() => {
     dispatch(getProducts())
     dispatch(getAllCustomer())
@@ -45,41 +25,19 @@ const Dashboard = () => {
   }, [dispatch])
 
   const totalSales = sales.reduce((total, sales) => total+Number(sales.paidAmount) , 0)
+
+  const creditAmt = sales.reduce((total , sale) => total + (Number(sale.totalAmount) - Number(sale.paidAmount)) , 0)
+
+  const lowStock = products.filter((product) => product.quantity < 20)
   
   return (
     <div className='w-full flex flex-col gap-5'>
 
-      <div className='w-full'>
+      <div className='w-full mt-3'>
         <div>
-        <div className='px-5 flex justify-between items-center h-[10vh]'>
-
-          <div>
-            <h1 className='text-xl font-bold text-gray-800'>Hello {user?.userName ?? 'there'}👏</h1>
-            <p className='text-sm text-gray-500'>Here is Your activities</p>
-          </div>
-
-          <div className='flex justify-center items-center gap-2 relative'>
-            <button className='py-1 px-3 bg-white shadow  rounded-md '>{new Date().toDateString()}</button>
-            <button className='py-1 px-3 text-white rounded-md shadow bg-[#00855D]'>New Sales</button>
-          </div>
-
-        </div>
         <div>
 
           <div className='flex justify-center items-center gap-5 px-5'>
-
-            <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
-              <div className='flex justify-between items-center'>
-                <h1 className='text-gray-500 font-medium'>Total Sales</h1>
-                <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
-              </div>
-
-              <div>
-                <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{totalSales}</h1>
-
-                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
-              </div>
-            </div>
             
             <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
               <div className='flex justify-between items-center'>
@@ -89,34 +47,39 @@ const Dashboard = () => {
 
               <div>
                 <h1 className='font-bold text-4xl'>{customers.length}</h1>
+              </div>
+            </div>
 
-                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+{todayCustomers.length} customers</span> Registered based</div>
+             <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
+              <div className='flex justify-between items-center'>
+                <h1 className='text-gray-500 font-medium'>Total Sales</h1>
+                <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
+              </div>
+
+              <div>
+                <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{totalSales}</h1>
               </div>
             </div>
 
             <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
               <div className='flex justify-between items-center'>
-                <h1 className='text-gray-500 font-medium'>Total Customer</h1>
+                <h1 className='text-gray-500 font-medium'>Total credit</h1>
                 <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
               </div>
 
               <div>
-                <h1 className='font-bold text-4xl'>128</h1>
-
-                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
+                <h1 className='font-bold text-4xl'><i className="fa-solid fa-indian-rupee-sign"></i>{creditAmt}</h1>
               </div>
             </div>
 
             <div className='h-[20vh] w-1/4 bg-white shadow border border-gray-200 rounded-xl flex justify-center flex-col items-left px-5 gap-5'>
               <div className='flex justify-between items-center'>
-                <h1 className='text-gray-500 font-medium'>Total Customer</h1>
+                <h1 className='text-gray-500 font-medium'>Total Products</h1>
                 <div className='bg-gray-300 rounded-full p-1.5'><i className="fa-solid fa-users text-gray-600"></i></div>
               </div>
 
               <div>
-                <h1 className='font-bold text-4xl'>128</h1>
-
-                <div className='text-sm text-gray-500 font-medium'><span className='text-green-800'>+6 today</span> Registered based</div>
+                <h1 className='font-bold text-4xl'>{products.length}</h1>
               </div>
             </div>
             
@@ -361,7 +324,7 @@ const Dashboard = () => {
               </div>
 
               <span className='text-xs font-medium px-2.5 py-1 rounded-md bg-orange-100 text-orange-700'>
-                5 Items
+                {lowStock.length} items
               </span>
 
             </div>

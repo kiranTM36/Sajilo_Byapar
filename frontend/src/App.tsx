@@ -17,6 +17,7 @@ import PrivateRoute from './utils/PrivateRoute '
 import { useSelector } from 'react-redux'
 import type { RootState } from './store/store'
 import Profile from './pages/Profile'
+import LowItem from './pages/LowItem'
 
 const App = () => {
 
@@ -32,8 +33,9 @@ const App = () => {
             <Route path="/" element={<Home />}>
                 <Route index element={<Dashboard />} />
                 <Route path="sales" element={<Sales />} />
+                <Route path="low" element={<LowItem />} />
                 <Route path="products" element={<Products />} />
-                <Route path="inv" element={<InventoryForm />} />
+                <Route path="addBacth" element={<InventoryForm />} />
                 <Route path="profile" element={<Profile />} />
 
                 <Route path="customers">

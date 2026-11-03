@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { type AppDispatch, type RootState } from '../store/store'
 import { showInventory } from '../store/inventorySlice'
@@ -23,14 +23,11 @@ const Inventory = () => {
             <button className='absolute top-0 right-0 h-full w-[3vw] bg-[#00855D] text-white'><i className="fa-solid fa-magnifying-glass"></i></button>
           </div>
 
-          <select name="" id="" className='w-[15%] border border-gray-200 p-1'>
-            <option value="">Category</option>
-            {/* {
-              category.map((item)=> (
-                <option value={`${item.id}`} key={`${item.id}`}>{item.categoryName}</option>
-              ))
-            } */}
-          </select>
+          <Link to='/addBacth' className='w-[15%]'>
+            <div className='w-full border border-gray-200 p-1 bg-[#00855D] text-white text-center rounded-md hover:scale-105 duration-150 ease-in cursor-pointer'>
+            Add Inventory
+          </div>
+          </Link>
         </div>
         <div className='h-[68vh] w-full border border-gray-200 rounded-md bg-white'>
           <div>
